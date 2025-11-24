@@ -123,8 +123,8 @@ class GrantCardRenderer {
         // 表示用データ
         $data['main_category'] = !empty($data['categories']) ? $data['categories'][0] : '';
         $data['prefecture'] = !empty($data['prefectures']) ? $data['prefectures'][0] : '';
-        $data['amount_formatted'] = $this->format_amount($data['max_amount_numeric'], $data['max_amount']);
-        $data['deadline_formatted'] = $this->format_deadline($data['deadline_date'] ?: $data['deadline']);
+        $data['amount_formatted'] = self::format_amount($data['max_amount_numeric'], $data['max_amount']);
+        $data['deadline_formatted'] = self::format_deadline($data['deadline_date'] ?: $data['deadline']);
         $data['status_display'] = $this->map_status($data['application_status']);
         $data['difficulty_info'] = $this->get_difficulty_info($data['grant_difficulty']);
         
@@ -320,9 +320,13 @@ class GrantCardRenderer {
     }
     
     /**
-     * 金額フォーマット
+     * 金額フォーマット（公開静的メソッド）
+     * 
+     * @param int|string $amount_numeric 数値金額
+     * @param string $amount_text テキスト金額（フォールバック用）
+     * @return string フォーマット済み金額
      */
-    private function format_amount($amount_numeric, $amount_text = '') {
+    public static function format_amount($amount_numeric, $amount_text = '') {
         $amount = intval($amount_numeric);
         
         if ($amount >= 100000000) {
@@ -339,9 +343,19 @@ class GrantCardRenderer {
     }
     
     /**
-     * 締切フォーマット
+     * 金額フォーマット（インスタンスメソッド - 後方互換性）
      */
-    private function format_deadline($deadline) {
+    private function format_amount_instance($amount_numeric, $amount_text = '') {
+        return self::format_amount($amount_numeric, $amount_text);
+    }
+    
+    /**
+     * 締切フォーマット（公開静的メソッド）
+     * 
+     * @param string|int $deadline 締切日（文字列またはタイムスタンプ）
+     * @return string フォーマット済み締切日
+     */
+    public static function format_deadline($deadline) {
         if (empty($deadline)) return '未定';
         
         $timestamp = is_numeric($deadline) ? intval($deadline) : strtotime($deadline);
@@ -350,6 +364,13 @@ class GrantCardRenderer {
         }
         
         return $deadline;
+    }
+    
+    /**
+     * 締切フォーマット（インスタンスメソッド - 後方互換性）
+     */
+    private function format_deadline_instance($deadline) {
+        return self::format_deadline($deadline);
     }
     
     /**

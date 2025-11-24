@@ -1998,6 +1998,195 @@ class GI_Smart_Query_Assistant {
             '研究開発' => ['R&D', '技術開発', 'イノベーション', '新技術']
         ];
         
+        return $alternatives;
+    }
+}
+
+/**
+ * =============================================================================
+ * GRANT RECOMMENDATION SYSTEM
+ * Moved from single-grant.php for better code organization
+ * =============================================================================
+ */
+
+/**
+ * スコアベースのレコメンドシステム v2.0
+ * 終了案件を除外し、複数の関連性要素でスコアリング
+ * 
+ * @param int $post_id 現在の補助金ID
+ * @param array $taxonomies タクソノミー配列
+ * @param array $grant_data 補助金データ配列
+ * @param int $limit 取得件数
+ * @param bool $exclude_closed 終了案件を除外するか
+ * @return array スコア付き関連補助金の配列
+ */
+function gi_get_scored_related_grants($post_id, $taxonomies, $grant_data, $limit = 12, $exclude_closed = true) {
+    $candidate_args = array(
+        'post_type' => 'grant',
+        'posts_per_page' => 100,
+        'post__not_in' => array($post_id),
+        'post_status' => 'publish',
+    );
+    
+    // 終了案件を除外
+    if ($exclude_closed) {
+        $candidate_args['meta_query'] = array(
+            'relation' => 'OR',
+            array(
+                'key' => 'application_status',
+                'value' => 'open',
+                'compare' => '='
+            ),
+            array(
+                'key' => 'application_status',
+                'compare' => 'NOT EXISTS'
+            )
+        );
+    }
+    
+    $candidates = new WP_Query($candidate_args);
+    $scored_grants = array();
+    
+    // 現在の補助金のタクソノミーID取得
+    $current_pref_ids = !empty($taxonomies['prefectures']) ? wp_list_pluck($taxonomies['prefectures'], 'term_id') : array();
+    $current_muni_ids = !empty($taxonomies['municipalities']) ? wp_list_pluck($taxonomies['municipalities'], 'term_id') : array();
+    $current_cat_ids = !empty($taxonomies['categories']) ? wp_list_pluck($taxonomies['categories'], 'term_id') : array();
+    $current_tag_ids = !empty($taxonomies['tags']) ? wp_list_pluck($taxonomies['tags'], 'term_id') : array();
+    
+    // 全国対応判定
+    $current_is_nationwide = false;
+    if (!empty($taxonomies['prefectures'])) {
+        foreach ($taxonomies['prefectures'] as $pref) {
+            if (in_array($pref->slug, array('zenkoku', 'nationwide')) || count($taxonomies['prefectures']) >= 47) {
+                $current_is_nationwide = true;
+                break;
+            }
+        }
+    }
+    
+    if ($candidates->have_posts()) {
+        while ($candidates->have_posts()) {
+            $candidates->the_post();
+            $candidate_id = get_the_ID();
+            $score = 0;
+            $match_details = array();
+            
+            // 候補補助金のタクソノミー取得
+            $candidate_prefs = wp_get_post_terms($candidate_id, 'grant_prefecture', array('fields' => 'ids'));
+            $candidate_munis = wp_get_post_terms($candidate_id, 'grant_municipality', array('fields' => 'ids'));
+            $candidate_prefs_slugs = wp_get_post_terms($candidate_id, 'grant_prefecture', array('fields' => 'slugs'));
+            
+            $candidate_is_nationwide = (
+                in_array('zenkoku', $candidate_prefs_slugs) || 
+                in_array('nationwide', $candidate_prefs_slugs) || 
+                count($candidate_prefs) >= 47
+            );
+            
+            // 市町村一致（最高優先度: +200点/件）
+            if (!empty($current_muni_ids) && !empty($candidate_munis)) {
+                $muni_intersect = array_intersect($candidate_munis, $current_muni_ids);
+                if (count($muni_intersect) > 0) {
+                    $score += count($muni_intersect) * 200;
+                    $match_details[] = '同じ市町村';
+                }
+            }
+            
+            // 都道府県一致（+100点/件）
+            if (!empty($current_pref_ids) && !empty($candidate_prefs)) {
+                $pref_intersect = array_intersect($candidate_prefs, $current_pref_ids);
+                if (count($pref_intersect) > 0) {
+                    $score += count($pref_intersect) * 100;
+                    $match_details[] = '同じ都道府県';
+                }
+            }
+            
+            // 全国対応ボーナス
+            if (!$current_is_nationwide && $candidate_is_nationwide) {
+                $score += 50;
+                $match_details[] = '全国対応';
+            } elseif ($current_is_nationwide && !$candidate_is_nationwide) {
+                $score += 20;
+                $match_details[] = '地域限定';
+            } elseif ($current_is_nationwide && $candidate_is_nationwide) {
+                $score += 30;
+                $match_details[] = '全国対応';
+            }
+            
+            // カテゴリ一致（+80点/件）
+            if (!empty($current_cat_ids)) {
+                $candidate_cats = wp_get_post_terms($candidate_id, 'grant_category', array('fields' => 'ids'));
+                $cat_intersect = array_intersect($candidate_cats, $current_cat_ids);
+                if (count($cat_intersect) > 0) {
+                    $score += count($cat_intersect) * 80;
+                    $match_details[] = '同じカテゴリ';
+                }
+            }
+            
+            // タグ一致（+40点/件）
+            if (!empty($current_tag_ids)) {
+                $candidate_tags = wp_get_post_tags($candidate_id, array('fields' => 'ids'));
+                $tag_intersect = array_intersect($candidate_tags, $current_tag_ids);
+                if (count($tag_intersect) > 0) {
+                    $score += count($tag_intersect) * 40;
+                    $match_details[] = '同じタグ';
+                }
+            }
+            
+            // 募集中ボーナス（+30点）
+            $candidate_status = function_exists('get_field') ? get_field('application_status', $candidate_id) : 'open';
+            if ($candidate_status === 'open') {
+                $candidate_deadline = function_exists('get_field') ? get_field('deadline_date', $candidate_id) : '';
+                if (!empty($candidate_deadline)) {
+                    $deadline_timestamp = strtotime($candidate_deadline);
+                    if ($deadline_timestamp && $deadline_timestamp > current_time('timestamp')) {
+                        $score += 30;
+                        $match_details[] = '募集中';
+                    }
+                }
+            }
+            
+            // 金額類似度（+10点）
+            $candidate_amount = function_exists('get_field') ? intval(get_field('max_amount_numeric', $candidate_id)) : 0;
+            $current_amount = $grant_data['max_amount_numeric'];
+            if ($candidate_amount > 0 && $current_amount > 0) {
+                $amount_diff_ratio = abs($candidate_amount - $current_amount) / max($candidate_amount, $current_amount);
+                if ($amount_diff_ratio < 0.3) {
+                    $score += 10;
+                    $match_details[] = '似た金額';
+                }
+            }
+            
+            // 人気度ボーナス（+5点）
+            $candidate_views = function_exists('get_field') ? intval(get_field('views_count', $candidate_id)) : 0;
+            if ($candidate_views > 100) {
+                $score += 5;
+            }
+            
+            // 最小スコア閾値（20点以上）
+            if ($score >= 20) {
+                $scored_grants[] = array(
+                    'id' => $candidate_id,
+                    'score' => $score,
+                    'title' => get_the_title(),
+                    'permalink' => get_permalink(),
+                    'match_details' => !empty($match_details) ? implode(', ', $match_details) : '関連',
+                );
+            }
+        }
+        wp_reset_postdata();
+    }
+    
+    // スコアでソート（降順）
+    usort($scored_grants, function($a, $b) {
+        if ($a['score'] === $b['score']) {
+            return $b['id'] - $a['id']; // 同点の場合は新しい順
+        }
+        return $b['score'] - $a['score'];
+    });
+    
+    return array_slice($scored_grants, 0, $limit);
+}
+        
         foreach ($patterns as $keyword => $synonyms) {
             if (mb_stripos($query, $keyword) !== false) {
                 foreach ($synonyms as $synonym) {
