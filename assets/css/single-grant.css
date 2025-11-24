@@ -1,0 +1,3108 @@
+}
+
+.gus-pc-ai-permanent-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.8px;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.3px;
+}
+
+.gus-pc-ai-permanent-subtitle {
+    font-size: 9.4px;
+    opacity: 0.85;
+    font-weight: 500;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.gus-pc-ai-permanent-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--gus-gray-50);
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.gus-pc-ai-permanent-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.gus-pc-ai-permanent-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.gus-pc-ai-permanent-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.gus-pc-ai-permanent-input-container {
+    padding: 14px;
+    background: var(--gus-white);
+    border-top: 2px solid var(--gus-gray-300);
+    flex-shrink: 0;
+}
+
+.gus-pc-ai-permanent-input-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.gus-pc-ai-permanent-input {
+    flex: 1;
+    padding: 12px 14px;
+    border: 2px solid var(--gus-gray-300);
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: inherit;
+    min-height: 44px;
+    max-height: 80px;
+    resize: none;
+    transition: all var(--gus-transition);
+    background: var(--gus-gray-100);
+    color: #1A1A1A;
+}
+
+.gus-pc-ai-permanent-input:focus {
+    outline: none;
+    border-color: var(--gus-yellow);
+    background: var(--gus-white);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+}
+
+.gus-pc-ai-permanent-send {
+    width: 44px;
+    height: 44px;
+    background: var(--gus-yellow);
+    color: var(--gus-black);
+    border: 2px solid var(--gus-yellow);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--gus-transition);
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.gus-pc-ai-permanent-send:hover:not(:disabled) {
+    background: var(--gus-black);
+    color: var(--gus-yellow);
+    border-color: var(--gus-black);
+    transform: scale(1.05);
+}
+
+.gus-pc-ai-permanent-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.gus-pc-ai-permanent-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.gus-pc-ai-permanent-suggestion {
+    padding: 7px 12px;
+    background: var(--gus-gray-100);
+    color: #1A1A1A;
+    border: 1px solid var(--gus-gray-300);
+    border-radius: 4px;
+    font-size: 9.4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--gus-transition);
+    white-space: nowrap;
+}
+
+.gus-pc-ai-permanent-suggestion:hover {
+    background: var(--gus-yellow);
+    color: var(--gus-black);
+    border-color: var(--gus-yellow);
+    transform: translateY(-1px);
+}
+
+/* AIメッセージ */
+.gus-ai-message {
+    display: flex;
+    gap: 10px;
+    max-width: 90%;
+    animation: messageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gus-ai-message--assistant {
+    align-self: flex-start;
+}
+
+.gus-ai-message--user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.gus-ai-message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gus-ai-message--assistant .gus-ai-message-avatar {
+    background: linear-gradient(135deg, var(--gus-black) 0%, #333333 100%);
+    color: var(--gus-white);
+    border-color: var(--gus-black);
+}
+
+.gus-ai-message--user .gus-ai-message-avatar {
+    background: linear-gradient(135deg, var(--gus-white) 0%, var(--gus-gray-100) 100%);
+    color: var(--gus-black);
+    border-color: var(--gus-gray-300);
+}
+
+.gus-ai-message-content {
+    background: var(--gus-gray-100);
+    padding: 11px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--gus-gray-300);
+    font-size: 10.2px;
+    line-height: 1.6;
+    color: #1A1A1A;
+    word-wrap: break-word;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.gus-ai-message--user .gus-ai-message-content {
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border-color: var(--gus-black);
+}
+
+/* タイピングインジケーター */
+.gus-ai-typing {
+    display: flex;
+    gap: 10px;
+    max-width: 90%;
+    align-self: flex-start;
+}
+
+.gus-ai-typing-dots {
+    background: var(--gus-gray-100);
+    padding: 11px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--gus-gray-300);
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.gus-ai-typing-dot {
+    width: 6px;
+    height: 6px;
+    background: #666666;
+    border-radius: 4px;
+    animation: typing 1.4s infinite;
+}
+
+.gus-ai-typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.gus-ai-typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 80%, 100% {
+        transform: scale(0.7);
+        opacity: 0.4;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ===============================================
+   おすすめ補助金（横スクロール式）
+   =============================================== */
+.gus-related-section {
+    margin: var(--gus-space-2xl) 0;
+    padding: var(--gus-space-xl) 0;
+    background: linear-gradient(180deg, #FFFBF0 0%, var(--gus-white) 100%);
+    border-top: 3px solid var(--gus-yellow);
+    border-bottom: 1px solid var(--gus-gray-300);
+}
+
+.gus-related-header {
+    display: flex;
+    align-items: center;
+    gap: var(--gus-space-md);
+    margin-bottom: var(--gus-space-lg);
+    padding-bottom: var(--gus-space-md);
+    border-bottom: 2px solid var(--gus-gray-300);
+}
+
+.gus-related-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--gus-black);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.gus-related-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--gus-black);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.gus-related-subtitle {
+    font-size: 0.875rem;
+    color: #666666;
+    margin: 8px 0 0 0;
+    font-weight: 500;
+}
+
+/* 横スクロールコンテナ */
+.gus-carousel-container {
+    position: relative;
+    overflow: hidden;
+    padding: 0 40px;
+}
+
+.gus-carousel-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 4px 0;
+}
+
+.gus-carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.gus-carousel-card {
+    flex: 0 0 320px;
+    scroll-snap-align: start;
+    background: var(--gus-white);
+    border: 2px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    padding: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: block;
+}
+
+.gus-carousel-card:hover {
+    border-color: var(--gus-yellow);
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+    transform: translateY(-4px);
+}
+
+/* ナビゲーションボタン */
+.gus-carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.gus-carousel-nav:hover {
+    background: var(--gus-yellow);
+    color: var(--gus-black);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.gus-carousel-nav-prev {
+    left: 0;
+}
+
+.gus-carousel-nav-next {
+    right: 0;
+}
+
+.gus-carousel-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* スクロールヒント */
+.gus-scroll-hint {
+    text-align: center;
+    padding: 12px;
+    background: linear-gradient(180deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+    border: 1px dashed var(--gus-yellow);
+    border-radius: 4px;
+    margin-top: 12px;
+    font-size: 11px;
+    color: #B8860B;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* ===============================================
+   テーブルデザイン（PC版）
+   =============================================== */
+.gus-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    margin-bottom: 20px;
+    border-radius: var(--gus-radius);
+    overflow: hidden;
+}
+
+.gus-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    overflow: hidden;
+    table-layout: auto;
+    min-width: 600px;
+    box-sizing: border-box;
+}
+
+.gus-table th,
+.gus-table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--gus-gray-200);
+    font-size: 11px;
+    line-height: 1.8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    white-space: normal;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.gus-table th {
+    background: linear-gradient(135deg, var(--gus-gray-50) 0%, var(--gus-gray-100) 100%);
+    font-weight: 800;
+    color: var(--gus-black);
+    width: 140px;
+    min-width: 140px;
+    max-width: 140px;
+    white-space: normal;
+    border-right: 1px solid var(--gus-gray-300);
+}
+
+.gus-table td {
+    font-weight: 500;
+    color: var(--gus-gray-800);
+    width: auto;
+}
+
+.gus-table tr:last-child th,
+.gus-table tr:last-child td {
+    border-bottom: none;
+}
+
+.gus-table tr:hover {
+    background: var(--gus-gray-50);
+}
+
+/* タイトル行 */
+.gus-table-title-row {
+    background: linear-gradient(135deg, var(--gus-black) 0%, #1a1a1a 100%);
+}
+
+.gus-table-title-row:hover {
+    background: linear-gradient(135deg, var(--gus-black) 0%, #1a1a1a 100%) !important;
+}
+
+.gus-table-title-cell {
+    padding: 20px 24px !important;
+    text-align: left !important;
+    border-right: none !important;
+    border-bottom: 2px solid var(--gus-yellow) !important;
+    background: transparent !important;
+}
+
+.gus-table-title-cell h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.5;
+    color: var(--gus-white);
+    text-align: left;
+    letter-spacing: 0.01em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    max-width: 100%;
+    white-space: normal;
+}
+
+/* タグ行 */
+.gus-table-tags-row {
+    background: var(--gus-gray-50);
+}
+
+.gus-table-tags-cell {
+    padding: 16px 18px !important;
+}
+
+.gus-table-tags-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gus-table-tags-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gus-table-tags-label {
+    font-size: 13px;
+    color: #666;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gus-table-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.gus-table-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: var(--gus-white);
+    color: #666;
+    border: 1px solid var(--gus-gray-300);
+    border-radius: 4px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 600;
+}
+
+.gus-table-tag:hover {
+    background: var(--gus-yellow);
+    color: var(--gus-black);
+    border-color: var(--gus-yellow);
+    transform: translateY(-1px);
+}
+
+/* ===============================================
+   モバイルテーブル代替（カード表示・完全版）
+   =============================================== */
+.gus-mobile-table-card-container {
+    display: none;
+    gap: var(--gus-space-md);
+    flex-direction: column;
+}
+
+.gus-mobile-table-card {
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    padding: var(--gus-space-lg);
+}
+
+.gus-mobile-table-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--gus-gray-200);
+}
+
+.gus-mobile-table-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.gus-mobile-table-label {
+    font-size: var(--gus-text-sm);
+    font-weight: 700;
+    color: var(--gus-gray-700);
+    flex-basis: 35%;
+    flex-shrink: 0;
+}
+
+.gus-mobile-table-value {
+    font-size: var(--gus-text-sm);
+    font-weight: 500;
+    color: var(--gus-black);
+    flex-basis: 65%;
+    text-align: right;
+}
+
+.gus-mobile-table-value strong {
+    font-weight: 700;
+}
+
+/* ヘッダー */
+.gus-header {
+    margin-bottom: var(--gus-space-xl);
+}
+
+.gus-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--gus-space-md);
+    flex-wrap: wrap;
+    gap: var(--gus-space-sm);
+}
+
+.gus-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gus-space-xs);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: var(--gus-text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    min-height: 32px;
+}
+
+.gus-status-badge.open {
+    background: var(--gus-black);
+    color: var(--gus-white);
+}
+
+.gus-status-badge.urgent {
+    background: #DC2626;
+    color: var(--gus-white);
+}
+
+.gus-status-badge.closed {
+    background: var(--gus-gray-500);
+    color: var(--gus-white);
+}
+
+.gus-featured-badge {
+    background: var(--gus-yellow);
+    color: var(--gus-black);
+    padding: 6px 12px;
+    font-size: var(--gus-text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.gus-reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gus-space-xs);
+    color: var(--gus-gray-600);
+    font-size: var(--gus-text-sm);
+    margin-bottom: var(--gus-space-md);
+}
+
+/* セクション */
+.gus-section {
+    background: var(--gus-gray-50);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    padding: var(--gus-space-xl);
+    margin-bottom: var(--gus-space-lg);
+    border-left: 3px solid var(--gus-black);
+}
+
+.gus-section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--gus-space-sm);
+    margin-bottom: var(--gus-space-lg);
+    padding-bottom: var(--gus-space-md);
+    border-bottom: 1px solid var(--gus-gray-300);
+}
+
+.gus-section-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.gus-section-title {
+    font-size: var(--gus-text-xl);
+    font-weight: 700;
+    color: var(--gus-black);
+    margin: 0;
+}
+
+.gus-section-content {
+    font-size: var(--gus-text-base);
+    color: var(--gus-gray-700);
+    line-height: 1.7;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* 難易度 */
+.gus-difficulty {
+    display: flex;
+    align-items: center;
+    gap: var(--gus-space-sm);
+}
+
+.gus-difficulty-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.gus-difficulty-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 4px;
+    background: var(--gus-gray-300);
+}
+
+.gus-difficulty-dot.filled {
+    background: var(--gus-black);
+}
+
+/* 申請フロー */
+.gus-application-flow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gus-space-md);
+}
+
+.gus-flow-step {
+    display: flex;
+    align-items: center;
+    gap: var(--gus-space-lg);
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    padding: var(--gus-space-lg);
+    transition: all 0.2s ease;
+}
+
+.gus-flow-step:hover {
+    border-color: var(--gus-yellow);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+}
+
+.gus-flow-number {
+    width: 48px;
+    height: 48px;
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--gus-text-xl);
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.gus-flow-content h3 {
+    font-size: var(--gus-text-lg);
+    font-weight: 700;
+    margin-bottom: var(--gus-space-xs);
+}
+
+.gus-flow-content p {
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-600);
+    margin: 0;
+}
+
+.gus-flow-arrow {
+    text-align: center;
+    font-size: var(--gus-text-2xl);
+    color: var(--gus-gray-500);
+}
+
+/* FAQ */
+.gus-faq {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gus-space-md);
+}
+
+.gus-faq-item {
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    padding: var(--gus-space-lg);
+    transition: all 0.2s ease;
+}
+
+.gus-faq-item:hover {
+    border-color: var(--gus-yellow);
+}
+
+.gus-faq-question {
+    font-size: var(--gus-text-md);
+    font-weight: 700;
+    color: var(--gus-black);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.gus-faq-question::after {
+    content: '+';
+    font-size: var(--gus-text-2xl);
+    font-weight: 700;
+    transition: transform var(--gus-transition);
+    flex-shrink: 0;
+    margin-left: var(--gus-space-md);
+}
+
+.gus-faq-item[open] .gus-faq-question::after {
+    transform: rotate(45deg);
+}
+
+.gus-faq-answer {
+    margin-top: var(--gus-space-md);
+    padding-top: var(--gus-space-md);
+    border-top: 1px solid var(--gus-gray-200);
+    color: var(--gus-gray-700);
+    line-height: 1.7;
+}
+
+/* ボタン */
+.gus-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: var(--gus-radius);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    min-height: 44px;
+    text-align: center;
+    letter-spacing: 0.3px;
+}
+
+.gus-btn-primary {
+    background: var(--gus-yellow);
+    color: var(--gus-black);
+    border: 2px solid var(--gus-yellow);
+}
+
+.gus-btn-primary:hover {
+    background: var(--gus-black);
+    color: var(--gus-yellow);
+    border-color: var(--gus-black);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.gus-btn-secondary {
+    background: var(--gus-white);
+    color: var(--gus-black);
+    border: 1px solid var(--gus-gray-300);
+}
+
+.gus-btn-secondary:hover {
+    border-color: var(--gus-black);
+    background: var(--gus-gray-50);
+    transform: translateY(-1px);
+}
+
+.gus-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 目次 */
+.gus-toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.gus-toc-item {
+    margin-bottom: 4px;
+}
+
+.gus-toc-link {
+    display: block;
+    padding: 8px 10px;
+    color: #666666;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    border-left: 2px solid transparent;
+    border-radius: 4px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gus-toc-link:hover,
+.gus-toc-link.active {
+    color: var(--gus-black);
+    background: var(--gus-gray-100);
+    border-left-color: var(--gus-yellow);
+    padding-left: 14px;
+    font-weight: 600;
+}
+
+/* 関連コラム（サイドバー版） */
+.gus-related-columns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gus-related-column-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px;
+    background: #F9FAFB;
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 12px;
+}
+
+.gus-related-column-item:hover {
+    background: var(--gus-white);
+    border-color: var(--gus-yellow);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+    transform: translateX(2px);
+}
+
+.gus-related-column-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.gus-related-column-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gus-black);
+    margin-bottom: 6px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.gus-related-column-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.gus-related-column-arrow {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9CA3AF;
+    transition: all 0.2s ease;
+}
+
+.gus-related-column-item:hover .gus-related-column-arrow {
+    color: var(--gus-yellow);
+    transform: translateX(2px);
+}
+
+.gus-view-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gus-black);
+    background: #F3F4F6;
+    border-radius: var(--gus-radius);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.gus-view-all-link:hover {
+    background: var(--gus-yellow);
+    transform: translateX(2px);
+}
+
+/* 関連コラム記事セクション */
+.gus-related-columns-section {
+    margin-top: var(--gus-space-2xl);
+    margin-bottom: var(--gus-space-2xl);
+    padding: var(--gus-space-2xl) 0;
+    background: linear-gradient(180deg, var(--gus-gray-50) 0%, var(--gus-white) 100%);
+    border-top: 3px solid var(--gus-gray-300);
+}
+
+.gus-related-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gus-space-md);
+    margin-bottom: var(--gus-space-xl);
+}
+
+.gus-related-section-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--gus-black);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.gus-related-section-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--gus-black);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+}
+
+.gus-related-columns-intro p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666666;
+}
+
+.gus-related-columns-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: var(--gus-space-xl);
+}
+
+.gus-related-column-card {
+    display: block;
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    height: 100%;
+}
+
+.gus-related-column-card:hover {
+    border-color: var(--gus-yellow);
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
+    transform: translateY(-4px);
+}
+
+.gus-related-column-thumbnail {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #F5F5F5 0%, var(--gus-gray-300) 100%);
+}
+
+.gus-related-column-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gus-related-column-card:hover .gus-related-column-thumbnail img {
+    transform: scale(1.08);
+}
+
+.gus-related-column-card-content {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gus-related-column-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.gus-related-column-category,
+.gus-related-column-read-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #999999;
+    font-weight: 600;
+}
+
+.gus-related-column-card-title {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 48px;
+}
+
+.gus-related-column-card:hover .gus-related-column-card-title {
+    color: var(--gus-black);
+}
+
+.gus-related-column-card-excerpt {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666666;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.gus-related-columns-footer {
+    margin-top: var(--gus-space-2xl);
+    text-align: center;
+    padding-top: var(--gus-space-xl);
+    border-top: 2px solid var(--gus-gray-300);
+}
+
+/* ソーシャルシェア */
+.gus-social-share {
+    margin-top: var(--gus-space-2xl);
+    padding: var(--gus-space-xl);
+    background: var(--gus-gray-50);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+}
+
+.gus-social-share h3 {
+    font-size: var(--gus-text-lg);
+    font-weight: 700;
+    margin-bottom: var(--gus-space-md);
+}
+
+.gus-social-buttons {
+    display: flex;
+    gap: var(--gus-space-sm);
+    flex-wrap: wrap;
+}
+
+.gus-social-buttons .gus-btn {
+    width: auto;
+    flex: 1;
+    min-width: 120px;
+}
+
+/* ===============================================
+   共通CTAバナー（統一版）
+   =============================================== */
+.gus-unified-cta-section {
+    background: linear-gradient(135deg, var(--gus-black) 0%, #2d2d2d 100%);
+    color: #ffffff !important;
+    padding: 48px 0;
+    position: relative;
+    overflow: hidden;
+    margin: var(--gus-space-2xl) 0;
+}
+
+.gus-unified-cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gus-yellow) 0%, var(--gus-yellow-dark) 100%);
+}
+
+.gus-unified-cta-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--gus-space-xl);
+}
+
+.gus-unified-cta-content {
+    text-align: center;
+}
+
+.gus-unified-cta-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: var(--gus-space-md);
+    color: var(--gus-white) !important;
+}
+
+.gus-unified-cta-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: var(--gus-space-xl);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--gus-white) !important;
+}
+
+.gus-unified-cta-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--gus-space-lg);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.gus-unified-cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gus-space-md);
+    padding: 20px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--gus-radius);
+    transition: all 0.3s ease;
+    min-height: 80px;
+}
+
+.gus-unified-cta-btn-primary {
+    background: var(--gus-yellow);
+    color: var(--gus-black) !important;
+    border: 2px solid var(--gus-yellow);
+}
+
+.gus-unified-cta-btn-primary:hover {
+    background: var(--gus-black);
+    color: var(--gus-yellow) !important;
+    border-color: var(--gus-yellow);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+}
+
+.gus-unified-cta-btn-secondary {
+    background: #ffffff;
+    color: var(--gus-black) !important;
+    border: 2px solid var(--gus-gray-300);
+}
+
+.gus-unified-cta-btn-secondary:hover {
+    background: var(--gus-yellow);
+    color: var(--gus-black) !important;
+    border-color: var(--gus-yellow);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+}
+
+/* パンくずナビ */
+.gus-breadcrumb {
+    margin-top: var(--gus-space-2xl);
+    padding: var(--gus-space-lg);
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+}
+
+.gus-breadcrumb ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gus-space-sm);
+    font-size: var(--gus-text-sm);
+}
+
+.gus-breadcrumb li {
+    display: flex;
+    align-items: center;
+}
+
+.gus-breadcrumb a {
+    color: var(--gus-gray-700);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.gus-breadcrumb a:hover {
+    color: var(--gus-black);
+    text-decoration: underline;
+}
+
+/* 検索ページスタイルのカテゴリー・地域セクション */
+.gus-search-style-section {
+    margin-top: 32px;
+}
+
+.gus-search-section-box {
+    background: var(--gus-white);
+    border: 1px solid var(--gus-black);
+    border-radius: var(--gus-radius);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.gus-search-box-title {
+    font-size: 13.6px;
+    font-weight: 700;
+    color: var(--gus-black);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--gus-gray-300);
+}
+
+.gus-search-box-title i {
+    font-size: 13.6px;
+    color: #666666;
+}
+
+.gus-search-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.gus-search-link {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gus-black);
+    background: var(--gus-white);
+    border: 1px solid var(--gus-black);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.gus-search-link:hover {
+    background: var(--gus-yellow);
+    transform: translateY(-1px);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* ===============================================
+   モバイルフローティングAIボタン（v24.2）
+   =============================================== */
+.gus-mobile-ai-floating-btn {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--gus-yellow) 0%, var(--gus-yellow-dark) 100%);
+    color: var(--gus-black);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 999;
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    align-items: center;
+    justify-content: center;
+}
+
+.gus-mobile-ai-floating-btn:hover {
+    background: linear-gradient(135deg, var(--gus-black) 0%, #1a1a1a 100%);
+    color: var(--gus-yellow);
+    transform: scale(1.1);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.gus-mobile-ai-floating-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===============================================
+   モバイルパネル（v24.2）
+   =============================================== */
+.gus-mobile-panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.gus-mobile-panel-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.gus-mobile-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--gus-white);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 0;
+    max-height: 85vh;
+    overflow: hidden;
+    z-index: 1000;
+    transform: translateY(100%);
+    visibility: hidden;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.gus-mobile-panel.active {
+    transform: translateY(0);
+    visibility: visible;
+}
+
+/* パネルヘッダー（黒・ゴールド統一） */
+.gus-mobile-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 16px 20px;
+    background: linear-gradient(135deg, var(--gus-black) 0%, #1a1a1a 100%);
+    border-bottom: 3px solid var(--gus-yellow);
+    flex-shrink: 0;
+    position: relative;
+}
+
+.gus-mobile-panel-header::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 215, 0, 0.3);
+    border-radius: 2px;
+}
+
+.gus-mobile-panel-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gus-white);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -0.02em;
+}
+
+.gus-mobile-panel-title svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--gus-yellow);
+}
+
+.gus-mobile-panel-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--gus-white);
+    cursor: pointer;
+    padding: 8px;
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 20px;
+    transition: all 0.2s ease;
+}
+
+.gus-mobile-panel-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* AIパネル専用スタイル */
+.gus-ai-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: calc(85vh - 80px);
+    overflow: hidden;
+}
+
+/* メッセージエリア */
+.gus-ai-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: linear-gradient(180deg, #FAFAFA 0%, var(--gus-white) 100%);
+    min-height: 300px;
+    max-height: calc(85vh - 280px);
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.gus-ai-chat-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.gus-ai-chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.gus-ai-chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+/* メッセージバブル（モバイル専用） */
+#mobileAIPanel .gus-ai-message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+}
+
+#mobileAIPanel .gus-ai-message--assistant .gus-ai-message-avatar {
+    background: linear-gradient(135deg, var(--gus-black) 0%, #333333 100%);
+    color: var(--gus-white);
+}
+
+#mobileAIPanel .gus-ai-message--user .gus-ai-message-avatar {
+    background: linear-gradient(135deg, var(--gus-yellow) 0%, var(--gus-yellow-dark) 100%);
+    color: var(--gus-black);
+}
+
+#mobileAIPanel .gus-ai-message-content {
+    background: var(--gus-white);
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--gus-gray-300);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gus-black);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#mobileAIPanel .gus-ai-message--user .gus-ai-message-content {
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border-color: var(--gus-black);
+}
+
+/* タイピングインジケーター（モバイル専用） */
+#mobileAIPanel .gus-ai-typing-dots {
+    background: var(--gus-white);
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--gus-gray-300);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#mobileAIPanel .gus-ai-typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* 入力エリア（モバイル専用） */
+.gus-ai-input-container {
+    padding: 16px;
+    background: var(--gus-white);
+    border-top: 2px solid var(--gus-gray-300);
+    flex-shrink: 0;
+}
+
+.gus-ai-input-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 12px;
+}
+
+.gus-ai-input {
+    flex: 1;
+    padding: 14px 16px;
+    border: 2px solid var(--gus-gray-300);
+    border-radius: 12px;
+    font-size: 16px !important;
+    font-family: inherit;
+    min-height: 52px;
+    max-height: 120px;
+    resize: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--gus-gray-50);
+    color: var(--gus-black);
+    line-height: 1.5;
+}
+
+.gus-ai-input:focus {
+    outline: none;
+    border-color: var(--gus-yellow);
+    background: var(--gus-white);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+}
+
+.gus-ai-input::placeholder {
+    color: var(--gus-gray-500);
+    font-size: 15px;
+}
+
+.gus-ai-send {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--gus-yellow) 0%, var(--gus-yellow-dark) 100%);
+    color: var(--gus-black);
+    border: none;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.gus-ai-send:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--gus-black) 0%, #1a1a1a 100%);
+    color: var(--gus-yellow);
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.gus-ai-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* サジェスチョンチップ（モバイル専用） */
+.gus-ai-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.gus-ai-suggestion {
+    padding: 10px 16px;
+    background: var(--gus-white);
+    color: var(--gus-black);
+    border: 2px solid var(--gus-gray-300);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.gus-ai-suggestion:hover {
+    background: var(--gus-yellow);
+    color: var(--gus-black);
+    border-color: var(--gus-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.gus-ai-suggestion:active {
+    transform: translateY(0);
+}
+
+/* Affiliate Ad Space */
+.gus-sidebar-ad-space {
+    background: var(--gus-gray-50) !important;
+    border: 2px dashed var(--gus-gray-300) !important;
+    border-radius: var(--gus-radius) !important;
+    padding: 16px !important;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.gus-sidebar-ad-space:empty {
+    display: none;
+}
+
+/* アクセシビリティ */
+.gus-btn:focus-visible,
+.gus-toc-link:focus-visible,
+.gus-mobile-ai-floating-btn:focus-visible,
+.gus-ai-send:focus-visible,
+.gus-ai-suggestion:focus-visible,
+.gus-mobile-panel-close:focus-visible {
+    outline: 3px solid var(--gus-yellow);
+    outline-offset: 2px;
+}
+
+/* ダークモード対応（オプション） */
+@media (prefers-color-scheme: dark) {
+    .gus-mobile-panel {
+        background: #1a1a1a;
+    }
+    
+    .gus-ai-chat-messages {
+        background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+    }
+    
+    .gus-ai-message-content {
+        background: #2a2a2a;
+        border-color: #3a3a3a;
+        color: var(--gus-white);
+    }
+    
+    .gus-ai-input {
+        background: #2a2a2a;
+        border-color: #3a3a3a;
+        color: var(--gus-white);
+    }
+    
+    .gus-ai-suggestion {
+        background: #2a2a2a;
+        border-color: #3a3a3a;
+        color: var(--gus-white);
+    }
+}
+
+/* ===============================================
+   レスポンシブ
+   =============================================== */
+@media (max-width: 1024px) {
+    .gus-layout {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .gus-sidebar {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+        margin-top: var(--gus-space-2xl);
+    }
+    
+    .gus-main {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .gus-pc-ai-permanent {
+        display: none !important;
+    }
+    
+    .gus-related-columns-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    
+    .gus-carousel-card {
+        flex: 0 0 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .gus-single {
+        padding: var(--gus-space-lg) var(--gus-space-md);
+        padding-bottom: 100px;
+    }
+    
+    .gus-table-wrapper {
+        display: none !important; 
+    }
+    
+    .gus-mobile-table-card-container {
+        display: flex !important; 
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .gus-mobile-ai-floating-btn {
+        display: flex !important;
+    }
+    
+    .gus-related-columns-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .gus-carousel-container {
+        padding: 0 20px;
+    }
+    
+    .gus-carousel-card {
+        flex: 0 0 260px;
+    }
+    
+    .gus-carousel-nav {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .gus-search-section-box {
+        padding: 16px;
+        margin-bottom: 12px;
+    }
+    
+    .gus-search-box-title {
+        font-size: 11.9px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+    }
+    
+    .gus-search-links {
+        gap: 6px;
+    }
+    
+    .gus-search-link {
+        padding: 5px 10px;
+        font-size: 10.2px;
+    }
+    
+    .gus-unified-cta-buttons {
+        grid-template-columns: 1fr;
+        gap: var(--gus-space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .gus-mobile-table-card {
+        padding: var(--gus-space-md);
+    }
+    
+    .gus-carousel-card {
+        flex: 0 0 240px;
+    }
+    
+    .gus-mobile-ai-floating-btn {
+        width: 56px;
+        height: 56px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* プリント */
+@media print {
+    .gus-sidebar,
+    .gus-actions,
+    .gus-social-share,
+    .gus-mobile-ai-floating-btn,
+    .gus-pc-ai-permanent,
+    .gus-carousel-nav {
+        display: none !important;
+    }
+    
+    .gus-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .gus-mobile-table-card-container {
+        display: none !important;
+    }
+    
+    .gus-table-wrapper {
+        display: block !important;
+    }
+}
+</style>
+
+<main class="gus-single" itemscope itemtype="https://schema.org/Article">
+    <div class="gus-layout">
+        <!-- メインコンテンツ -->
+        <article class="gus-main">
+            <!-- ヘッダー -->
+            <header class="gus-header">
+                <div class="gus-header-top">
+                    <div class="gus-status-badge <?php echo $status_data['class']; ?> <?php echo $deadline_class; ?>">
+                        <?php echo $status_data['label']; ?>
+                        <?php if ($days_remaining > 0 && $days_remaining <= 30): ?>
+                            · <?php echo $days_remaining; ?>日
+                        <?php endif; ?>
+                    </div>
+                    <?php if ($grant_data['is_featured']): ?>
+                        <div class="gus-featured-badge">
+                            注目
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="gus-reading-time">
+                    <span>■</span>
+                    <span>読了時間: 約<?php echo $reading_time; ?>分</span>
+                    <span>·</span>
+                    <time datetime="<?php echo $published_date; ?>" itemprop="datePublished">
+                        更新: <?php echo get_the_modified_date('Y年n月j日'); ?>
+                    </time>
+                </div>
+            </header>
+
+            <!-- AI要約 -->
+            <?php if ($grant_data['ai_summary']): ?>
+            <section id="ai-summary" class="gus-section">
+                <header class="gus-section-header">
+                    <svg class="gus-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    <h2 class="gus-section-title">AI要約</h2>
+                </header>
+                <div class="gus-section-content">
+                    <p><?php echo esc_html($grant_data['ai_summary']); ?></p>
+                </div>
+            </section>
+            <?php endif; ?>
+
+            <!-- おすすめ補助金（横スクロール式・上部配置） -->
+            <?php if (!empty($scored_related_grants)): ?>
+            <section id="related" class="gus-related-section">
+                <header class="gus-related-header">
+                    <div class="gus-related-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                        </svg>
+                    </div>
+                    <div style="flex: 1;">
+                        <h2 class="gus-related-title">
+                            あなたにおすすめの補助金
+                            <span style="display: inline-block; margin-left: 12px; padding: 4px 10px; background: var(--gus-yellow); color: var(--gus-black); font-size: 12px; font-weight: 800; border-radius: 4px;">
+                                AI選定
+                            </span>
+                        </h2>
+                        <p class="gus-related-subtitle">
+                            同じ市町村・都道府県・カテゴリの補助金を優先表示（<?php echo count($scored_related_grants); ?>件のマッチ）
+                        </p>
+                    </div>
+                </header>
+                
+                <div class="gus-scroll-hint">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                    左右にスワイプして<?php echo min(count($scored_related_grants), 12); ?>件のおすすめ補助金を見る
+                </div>
+                
+                <div class="gus-carousel-container">
+                    <button class="gus-carousel-nav gus-carousel-nav-prev" id="carouselPrev" type="button" aria-label="前へ">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="gus-carousel-track" id="carouselTrack">
+                        <?php
+                        $display_count = 0;
+                        foreach ($scored_related_grants as $related_grant):
+                            if ($display_count >= 12) break;
+                            $display_count++;
+                            $related_id = $related_grant['id'];
+                            $post = get_post($related_id);
+                            if ($post) {
+                                setup_postdata($post);
+                                ?>
+                                <div class="gus-carousel-card">
+                                    <?php get_template_part('template-parts/grant-card-unified'); ?>
+                                </div>
+                                <?php
+                            }
+                        endforeach;
+                        wp_reset_postdata();
+                        ?>
+                    </div>
+                    
+                    <button class="gus-carousel-nav gus-carousel-nav-next" id="carouselNext" type="button" aria-label="次へ">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <?php if (count($scored_related_grants) > 12): ?>
+                <div style="margin-top: 24px; text-align: center;">
+                    <a href="<?php echo home_url('/grants/'); ?>" class="gus-btn gus-btn-secondary" style="display: inline-flex; width: auto; min-width: 240px;">
+                        さらに補助金を探す (残り<?php echo count($scored_related_grants) - 12; ?>件)
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </a>
+                </div>
+                <?php endif; ?>
+            </section>
+            <?php endif; ?>
+
+            <!-- 補助金詳細表（PC版テーブル + モバイル版カード完全版） -->
+            <section id="grant-details" class="gus-section">
+                <div class="gus-section-content">
+                    
+                    <!-- PC版テーブル（768px以上で表示） -->
+                    <div class="gus-table-wrapper">
+                        <table class="gus-table">
+                            <thead>
+                                <tr class="gus-table-title-row">
+                                    <th colspan="2" class="gus-table-title-cell">
+                                        <h1 itemprop="headline"><?php the_title(); ?></h1>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if ($formatted_amount): ?>
+                                <tr>
+                                    <th>補助金額<div style="font-size: 10px; font-weight: 500; color: #aaa;">(最大)</div></th>
+                                    <td><strong style="font-size: var(--gus-text-xl); color: #DC2626;"><?php echo esc_html($formatted_amount); ?></strong></td>
+                                </tr>
+                                <?php endif; ?>
+                                
+                                <?php if ($grant_data['subsidy_rate']): ?>
+                                <tr>
+                                    <th>補助率</th>
+                                    <td><?php echo esc_html($grant_data['subsidy_rate']); ?>
+                                        <?php if ($grant_data['subsidy_rate_detailed']): ?>
+
+/* ===============================================
+   NEW STYLES - DL Tag & Template Parts
+   =============================================== */
+
+/* Detail List (DL Tag) - PC/SP Unified */
+.gus-detail-list {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    overflow: hidden;
+    background: var(--gus-white);
+}
+
+.gus-detail-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    border-bottom: 1px solid var(--gus-gray-200);
+    min-height: 48px;
+}
+
+.gus-detail-item:last-child {
+    border-bottom: none;
+}
+
+.gus-detail-term {
+    padding: 16px;
+    background: var(--gus-gray-50);
+    font-weight: 600;
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-700);
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--gus-gray-200);
+    margin: 0;
+}
+
+.gus-detail-desc {
+    padding: 16px;
+    font-size: var(--gus-text-base);
+    color: var(--gus-gray-800);
+    line-height: 1.7;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.gus-detail-highlight .gus-detail-desc {
+    font-size: 20px;
+    font-weight: 700;
+    color: #DC2626;
+}
+
+.gus-detail-urgent .gus-detail-desc strong {
+    color: #DC2626;
+}
+
+.gus-detail-sub {
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-600);
+    margin-top: 4px;
+}
+
+.gus-detail-note {
+    font-size: var(--gus-text-xs);
+    color: #B8860B;
+    margin-top: 4px;
+    padding: 4px 8px;
+    background: #FFFBEB;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.gus-detail-meta {
+    background: var(--gus-gray-50);
+}
+
+/* Difficulty Display */
+.gus-difficulty-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.gus-difficulty-label {
+    font-weight: 700;
+    font-size: var(--gus-text-md);
+}
+
+.gus-difficulty-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.gus-difficulty-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gus-gray-300);
+    transition: var(--gus-transition);
+}
+
+.gus-difficulty-dot.filled {
+    background: var(--gus-black);
+}
+
+.gus-difficulty-desc {
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-600);
+}
+
+/* Tags Section */
+.gus-tags-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 2px solid var(--gus-gray-200);
+}
+
+.gus-tags-group {
+    margin-bottom: 16px;
+}
+
+.gus-tags-group:last-child {
+    margin-bottom: 0;
+}
+
+.gus-tags-label {
+    font-size: var(--gus-text-sm);
+    font-weight: 600;
+    color: var(--gus-gray-700);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.gus-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.gus-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    background: var(--gus-gray-100);
+    color: var(--gus-gray-700);
+    font-size: var(--gus-text-sm);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: var(--gus-transition);
+    border: 1px solid var(--gus-gray-200);
+}
+
+.gus-tag:hover {
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border-color: var(--gus-black);
+    transform: translateY(-1px);
+}
+
+.gus-tag-category {
+    background: #EFF6FF;
+    color: #1E40AF;
+    border-color: #BFDBFE;
+}
+
+.gus-tag-category:hover {
+    background: #1E40AF;
+    color: var(--gus-white);
+    border-color: #1E40AF;
+}
+
+.gus-tag-tag {
+    font-family: 'Courier New', monospace;
+}
+
+/* Header Components */
+.gus-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-600);
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.gus-breadcrumb a {
+    color: var(--gus-gray-600);
+    text-decoration: none;
+    transition: var(--gus-transition);
+}
+
+.gus-breadcrumb a:hover {
+    color: var(--gus-black);
+}
+
+.gus-breadcrumb .separator {
+    color: var(--gus-gray-400);
+}
+
+.gus-breadcrumb .current {
+    color: var(--gus-gray-800);
+    font-weight: 500;
+}
+
+.gus-status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--gus-gray-50);
+    border-radius: var(--gus-radius);
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.gus-status-bar.status-open {
+    background: #ECFDF5;
+    border: 1px solid #10B981;
+}
+
+.gus-status-bar.status-closed {
+    background: var(--gus-gray-100);
+    border: 1px solid var(--gus-gray-400);
+}
+
+.gus-status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: var(--gus-text-sm);
+    font-weight: 600;
+}
+
+.status-open .gus-status-badge {
+    background: #10B981;
+    color: var(--gus-white);
+}
+
+.status-closed .gus-status-badge {
+    background: var(--gus-gray-500);
+    color: var(--gus-white);
+}
+
+.gus-meta-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.gus-views-count {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-600);
+}
+
+.gus-favorite-btn,
+.gus-share-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: 6px;
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-700);
+    cursor: pointer;
+    transition: var(--gus-transition);
+}
+
+.gus-favorite-btn:hover,
+.gus-share-btn:hover {
+    border-color: var(--gus-black);
+    background: var(--gus-gray-50);
+}
+
+.gus-favorite-btn.is-favorite {
+    background: #FEE2E2;
+    border-color: #DC2626;
+    color: #DC2626;
+}
+
+.gus-favorite-btn.is-favorite svg {
+    fill: #DC2626;
+}
+
+/* Hero Grid */
+.gus-hero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.gus-hero-item {
+    padding: 16px;
+    background: var(--gus-gray-50);
+    border: 1px solid var(--gus-gray-200);
+    border-radius: var(--gus-radius);
+    text-align: center;
+}
+
+.gus-hero-amount {
+    background: #FEF2F2;
+    border-color: #FCA5A5;
+}
+
+.gus-hero-deadline.urgent {
+    background: #FEF2F2;
+    border-color: #DC2626;
+}
+
+.gus-hero-label {
+    font-size: var(--gus-text-xs);
+    color: var(--gus-gray-600);
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gus-hero-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gus-gray-900);
+}
+
+.gus-hero-amount .gus-hero-value {
+    color: #DC2626;
+    font-size: 24px;
+}
+
+.gus-hero-deadline.urgent .gus-hero-value {
+    color: #DC2626;
+}
+
+/* CTA Buttons */
+.gus-cta-buttons {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+
+.gus-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--gus-radius);
+    font-size: var(--gus-text-base);
+    font-weight: 600;
+    text-decoration: none;
+    border: 2px solid;
+    cursor: pointer;
+    transition: var(--gus-transition);
+}
+
+.gus-btn-primary {
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border-color: var(--gus-black);
+}
+
+.gus-btn-primary:hover {
+    background: var(--gus-gray-900);
+    transform: translateY(-2px);
+    box-shadow: var(--gus-shadow-lg);
+}
+
+.gus-btn-secondary {
+    background: var(--gus-white);
+    color: var(--gus-black);
+    border-color: var(--gus-gray-300);
+}
+
+.gus-btn-secondary:hover {
+    border-color: var(--gus-black);
+    background: var(--gus-gray-50);
+}
+
+.gus-btn-outline {
+    background: transparent;
+    color: var(--gus-black);
+    border-color: var(--gus-black);
+}
+
+.gus-btn-outline:hover {
+    background: var(--gus-black);
+    color: var(--gus-white);
+}
+
+/* AI Summary Box */
+.gus-ai-summary {
+    background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+    border: 2px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    padding: 24px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.gus-ai-summary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--gus-black) 0%, var(--gus-gray-600) 100%);
+}
+
+.gus-ai-summary-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.gus-ai-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.gus-ai-summary-title {
+    font-size: var(--gus-text-lg);
+    font-weight: 700;
+    margin: 0;
+    flex: 1;
+}
+
+.gus-ai-badge {
+    padding: 4px 10px;
+    background: var(--gus-black);
+    color: var(--gus-white);
+    font-size: var(--gus-text-xs);
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gus-ai-summary-content {
+    font-size: var(--gus-text-base);
+    line-height: 1.8;
+    color: var(--gus-gray-800);
+}
+
+.gus-ai-summary-content p {
+    margin: 0 0 12px 0;
+}
+
+.gus-ai-summary-content p:last-child {
+    margin-bottom: 0;
+}
+
+.gus-ai-summary-footer {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--gus-gray-300);
+}
+
+.gus-ai-disclaimer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--gus-text-xs);
+    color: var(--gus-gray-600);
+    margin: 0;
+}
+
+/* Related Columns */
+.gus-related-columns {
+    margin: 48px 0;
+}
+
+.gus-section-header {
+    margin-bottom: 24px;
+}
+
+.gus-section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: var(--gus-text-2xl);
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--gus-gray-900);
+}
+
+.gus-section-desc {
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-600);
+    margin: 0;
+}
+
+.gus-columns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.gus-column-card {
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-200);
+    border-radius: var(--gus-radius);
+    overflow: hidden;
+    transition: var(--gus-transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.gus-column-card:hover {
+    border-color: var(--gus-black);
+    box-shadow: var(--gus-shadow-lg);
+    transform: translateY(-4px);
+}
+
+.gus-column-thumbnail {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.gus-column-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--gus-transition);
+}
+
+.gus-column-card:hover .gus-column-thumbnail img {
+    transform: scale(1.05);
+}
+
+.gus-column-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.gus-column-category {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--gus-black);
+    color: var(--gus-white);
+    font-size: var(--gus-text-xs);
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    width: fit-content;
+}
+
+.gus-column-title {
+    font-size: var(--gus-text-lg);
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+}
+
+.gus-column-title a {
+    color: var(--gus-gray-900);
+    text-decoration: none;
+    transition: var(--gus-transition);
+}
+
+.gus-column-title a:hover {
+    color: var(--gus-black);
+}
+
+.gus-column-excerpt {
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-600);
+    line-height: 1.6;
+    margin: 0 0 16px 0;
+    flex: 1;
+}
+
+.gus-column-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: var(--gus-text-xs);
+    color: var(--gus-gray-500);
+    margin-bottom: 12px;
+}
+
+.gus-column-date,
+.gus-column-reading-time {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.gus-column-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--gus-text-sm);
+    font-weight: 600;
+    color: var(--gus-black);
+    text-decoration: none;
+    transition: var(--gus-transition);
+}
+
+.gus-column-link:hover {
+    gap: 10px;
+}
+
+.gus-columns-footer {
+    text-align: center;
+    padding-top: 24px;
+    border-top: 1px solid var(--gus-gray-200);
+}
+
+/* Floating AI Chat */
+.gus-floating-ai-chat {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+}
+
+.gus-ai-chat-trigger {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: var(--gus-transition);
+    position: relative;
+}
+
+.gus-ai-chat-trigger:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.gus-ai-icon-close {
+    display: none;
+}
+
+.gus-ai-chat-trigger.active .gus-ai-icon-default {
+    display: none;
+}
+
+.gus-ai-chat-trigger.active .gus-ai-icon-close {
+    display: block;
+}
+
+.gus-ai-chat-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    background: #DC2626;
+    color: var(--gus-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    border: 2px solid var(--gus-white);
+}
+
+/* AI Chat Window */
+.gus-ai-chat-window {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    width: 380px;
+    max-height: 600px;
+    background: var(--gus-white);
+    border: 2px solid var(--gus-gray-300);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    z-index: 9998;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gus-ai-chat-window.active {
+    display: flex;
+    transform: scale(1);
+    opacity: 1;
+}
+
+.gus-ai-chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--gus-black) 0%, #1a1a1a 100%);
+    color: var(--gus-white);
+    border-bottom: 1px solid var(--gus-gray-300);
+}
+
+.gus-ai-chat-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.gus-ai-avatar {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.gus-ai-chat-title-wrap {
+    flex: 1;
+}
+
+.gus-ai-chat-title {
+    font-size: var(--gus-text-md);
+    font-weight: 700;
+    margin: 0;
+}
+
+.gus-ai-chat-subtitle {
+    font-size: var(--gus-text-xs);
+    opacity: 0.8;
+    margin: 0;
+}
+
+.gus-ai-chat-close {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    color: var(--gus-white);
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--gus-transition);
+}
+
+.gus-ai-chat-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.gus-ai-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--gus-gray-50);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.gus-ai-message {
+    display: flex;
+    gap: 12px;
+    animation: messageSlideIn 0.3s ease-out;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gus-ai-message-avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.gus-ai-message-user .gus-ai-message-avatar {
+    background: var(--gus-gray-300);
+    color: var(--gus-gray-700);
+}
+
+.gus-ai-message-content {
+    flex: 1;
+}
+
+.gus-ai-message-content p {
+    background: var(--gus-white);
+    padding: 12px;
+    border-radius: 8px;
+    margin: 0;
+    font-size: var(--gus-text-sm);
+    line-height: 1.6;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.gus-ai-message-user .gus-ai-message-content p {
+    background: var(--gus-black);
+    color: var(--gus-white);
+}
+
+.gus-ai-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.gus-ai-suggestion {
+    padding: 10px 14px;
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: 6px;
+    font-size: var(--gus-text-sm);
+    color: var(--gus-gray-700);
+    text-align: left;
+    cursor: pointer;
+    transition: var(--gus-transition);
+}
+
+.gus-ai-suggestion:hover {
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border-color: var(--gus-black);
+}
+
+.gus-ai-chat-input-wrapper {
+    border-top: 1px solid var(--gus-gray-200);
+    background: var(--gus-white);
+}
+
+.gus-ai-chat-typing {
+    padding: 12px 16px;
+    background: var(--gus-gray-50);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--gus-gray-200);
+}
+
+.gus-typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.gus-typing-dots span {
+    width: 8px;
+    height: 8px;
+    background: var(--gus-gray-400);
+    border-radius: 50%;
+    animation: typingDot 1.4s infinite;
+}
+
+.gus-typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.gus-typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingDot {
+    0%, 60%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    30% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+.gus-typing-text {
+    font-size: var(--gus-text-xs);
+    color: var(--gus-gray-600);
+}
+
+.gus-ai-chat-input-form {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+}
+
+.gus-ai-chat-input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--gus-gray-300);
+    border-radius: 6px;
+    font-size: var(--gus-text-sm);
+    font-family: inherit;
+    transition: var(--gus-transition);
+}
+
+.gus-ai-chat-input:focus {
+    outline: none;
+    border-color: var(--gus-black);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.gus-ai-chat-send {
+    width: 40px;
+    height: 40px;
+    background: var(--gus-black);
+    color: var(--gus-white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--gus-transition);
+    flex-shrink: 0;
+}
+
+.gus-ai-chat-send:hover {
+    background: var(--gus-gray-900);
+    transform: scale(1.05);
+}
+
+.gus-ai-chat-send:disabled {
+    background: var(--gus-gray-300);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.gus-ai-chat-input-wrapper .gus-ai-disclaimer {
+    padding: 8px 12px;
+    background: var(--gus-gray-50);
+}
+
+.gus-ai-chat-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9997;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gus-ai-chat-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Mobile Responsive - DL Tags */
+@media (max-width: 768px) {
+    .gus-detail-item {
+        grid-template-columns: 1fr;
+    }
+    
+    .gus-detail-term {
+        border-right: none;
+        border-bottom: 1px solid var(--gus-gray-200);
+        padding: 12px;
+        background: var(--gus-white);
+        font-weight: 700;
+        color: var(--gus-gray-900);
+    }
+    
+    .gus-detail-desc {
+        padding: 12px;
+    }
+    
+    .gus-hero-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .gus-cta-buttons {
+        flex-direction: column;
+    }
+    
+    .gus-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .gus-columns-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .gus-ai-chat-window {
+        width: calc(100% - 32px);
+        right: 16px;
+        bottom: 80px;
+        max-height: calc(100vh - 120px);
+    }
+    
+    .gus-floating-ai-chat {
+        right: 16px;
+        bottom: 16px;
+    }
+    
+    .gus-meta-actions {
+        flex-wrap: wrap;
+    }
+    
+    .gus-status-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

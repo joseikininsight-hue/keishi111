@@ -607,6 +607,48 @@ function gi_add_api_settings_debug() {
 add_action('wp_footer', 'gi_add_api_settings_debug', 999);
 
 /**
+ * Single Grant Page Assets
+ * 補助金詳細ページ専用のCSS/JS読み込み
+ * 
+ * @since 11.1.0
+ */
+function gi_enqueue_single_grant_assets() {
+    // 補助金詳細ページのみで読み込み
+    if (!is_singular('grant')) {
+        return;
+    }
+    
+    $post_id = get_the_ID();
+    
+    // CSS読み込み
+    wp_enqueue_style(
+        'gi-single-grant',
+        get_template_directory_uri() . '/assets/css/single-grant.css',
+        array(),
+        GI_THEME_VERSION
+    );
+    
+    // JavaScript読み込み
+    wp_enqueue_script(
+        'gi-single-grant',
+        get_template_directory_uri() . '/assets/js/single-grant.js',
+        array('jquery'),
+        GI_THEME_VERSION,
+        true
+    );
+    
+    // JavaScript変数をローカライズ
+    wp_localize_script('gi-single-grant', 'giSingleGrantSettings', array(
+        'postId' => $post_id,
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('gi_single_grant_nonce'),
+        'restUrl' => rest_url(),
+        'restNonce' => wp_create_nonce('wp_rest'),
+    ));
+}
+add_action('wp_enqueue_scripts', 'gi_enqueue_single_grant_assets');
+
+/**
  * REST API: コラムカテゴリフィルタリングに関する注記
  * 
  * WordPressのREST APIは標準でタクソノミーIDによるフィルタリングをサポートしています。
