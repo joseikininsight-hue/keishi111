@@ -1,3 +1,155 @@
+/* ===============================================
+   PERFECT DESIGN SYSTEM v24.2 - MOBILE NAV FIXED
+   =============================================== */
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
+}
+
+input[type="text"], 
+input[type="search"], 
+input[type="email"], 
+input[type="tel"], 
+textarea, 
+select {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+:root {
+    --gus-white: #ffffff;
+    --gus-black: #111111;
+    --gus-yellow: #FFD700;
+    --gus-yellow-dark: #FFA500;
+    --gus-gray-50: #f9f9f9;
+    --gus-gray-100: #f5f5f5;
+    --gus-gray-200: #eeeeee;
+    --gus-gray-300: #e5e5e5;
+    --gus-gray-400: #bdbdbd;
+    --gus-gray-500: #9e9e9e;
+    --gus-gray-600: #757575;
+    --gus-gray-700: #616161;
+    --gus-gray-800: #424242;
+    --gus-gray-900: #212121;
+    --gus-text-xs: 12px;
+    --gus-text-sm: 13px;
+    --gus-text-base: 14px;
+    --gus-text-md: 14px;
+    --gus-text-lg: 15px;
+    --gus-text-xl: 16px;
+    --gus-text-2xl: 20px;
+    --gus-space-xs: 4px;
+    --gus-space-sm: 8px;
+    --gus-space-md: 12px;
+    --gus-space-lg: 16px;
+    --gus-space-xl: 24px;
+    --gus-space-2xl: 32px;
+    --gus-radius: 8px;
+    --gus-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    --gus-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --gus-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --gus-sidebar-width: 360px;
+    --gus-content-max-width: 1400px;
+    --gus-font-ja: 'Noto Sans JP', sans-serif;
+    --gus-font-en: 'Inter', sans-serif;
+}
+
+.gus-single {
+    max-width: var(--gus-content-max-width);
+    margin: 0 auto;
+    padding: var(--gus-space-xl) var(--gus-space-lg);
+    background: var(--gus-white);
+    font-family: var(--gus-font-ja);
+    font-size: var(--gus-text-base);
+    color: var(--gus-gray-800);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: text;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.gus-layout {
+    display: grid;
+    grid-template-columns: 1fr var(--gus-sidebar-width);
+    gap: var(--gus-space-2xl);
+    align-items: start;
+}
+
+.gus-main {
+    min-width: 0;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.gus-sidebar {
+    position: sticky;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: flex-start;
+}
+
+.gus-sidebar-card {
+    background: var(--gus-white);
+    border: 1px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    padding: 16px;
+    transition: all var(--gus-transition);
+}
+
+.gus-sidebar-card:hover {
+    border-color: var(--gus-black);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.gus-sidebar-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--gus-black);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===============================================
+   PC AIチャット
+   =============================================== */
+.gus-pc-ai-permanent {
+    background: var(--gus-white);
+    border: 2px solid var(--gus-gray-300);
+    border-radius: var(--gus-radius);
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gus-pc-ai-permanent:hover {
+    border-color: var(--gus-black);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+.gus-pc-ai-permanent-header {
+    padding: 16px;
+    background: linear-gradient(135deg, var(--gus-black) 0%, #1a1a1a 100%);
+    color: var(--gus-white);
+    border-bottom: 2px solid var(--gus-yellow);
+    flex-shrink: 0;
 }
 
 .gus-pc-ai-permanent-title {
@@ -1905,1204 +2057,5 @@
     
     .gus-table-wrapper {
         display: block !important;
-    }
-}
-</style>
-
-<main class="gus-single" itemscope itemtype="https://schema.org/Article">
-    <div class="gus-layout">
-        <!-- メインコンテンツ -->
-        <article class="gus-main">
-            <!-- ヘッダー -->
-            <header class="gus-header">
-                <div class="gus-header-top">
-                    <div class="gus-status-badge <?php echo $status_data['class']; ?> <?php echo $deadline_class; ?>">
-                        <?php echo $status_data['label']; ?>
-                        <?php if ($days_remaining > 0 && $days_remaining <= 30): ?>
-                            · <?php echo $days_remaining; ?>日
-                        <?php endif; ?>
-                    </div>
-                    <?php if ($grant_data['is_featured']): ?>
-                        <div class="gus-featured-badge">
-                            注目
-                        </div>
-                    <?php endif; ?>
-                </div>
-                <div class="gus-reading-time">
-                    <span>■</span>
-                    <span>読了時間: 約<?php echo $reading_time; ?>分</span>
-                    <span>·</span>
-                    <time datetime="<?php echo $published_date; ?>" itemprop="datePublished">
-                        更新: <?php echo get_the_modified_date('Y年n月j日'); ?>
-                    </time>
-                </div>
-            </header>
-
-            <!-- AI要約 -->
-            <?php if ($grant_data['ai_summary']): ?>
-            <section id="ai-summary" class="gus-section">
-                <header class="gus-section-header">
-                    <svg class="gus-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                    </svg>
-                    <h2 class="gus-section-title">AI要約</h2>
-                </header>
-                <div class="gus-section-content">
-                    <p><?php echo esc_html($grant_data['ai_summary']); ?></p>
-                </div>
-            </section>
-            <?php endif; ?>
-
-            <!-- おすすめ補助金（横スクロール式・上部配置） -->
-            <?php if (!empty($scored_related_grants)): ?>
-            <section id="related" class="gus-related-section">
-                <header class="gus-related-header">
-                    <div class="gus-related-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2">
-                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                        </svg>
-                    </div>
-                    <div style="flex: 1;">
-                        <h2 class="gus-related-title">
-                            あなたにおすすめの補助金
-                            <span style="display: inline-block; margin-left: 12px; padding: 4px 10px; background: var(--gus-yellow); color: var(--gus-black); font-size: 12px; font-weight: 800; border-radius: 4px;">
-                                AI選定
-                            </span>
-                        </h2>
-                        <p class="gus-related-subtitle">
-                            同じ市町村・都道府県・カテゴリの補助金を優先表示（<?php echo count($scored_related_grants); ?>件のマッチ）
-                        </p>
-                    </div>
-                </header>
-                
-                <div class="gus-scroll-hint">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                    左右にスワイプして<?php echo min(count($scored_related_grants), 12); ?>件のおすすめ補助金を見る
-                </div>
-                
-                <div class="gus-carousel-container">
-                    <button class="gus-carousel-nav gus-carousel-nav-prev" id="carouselPrev" type="button" aria-label="前へ">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="15 18 9 12 15 6"/>
-                        </svg>
-                    </button>
-                    
-                    <div class="gus-carousel-track" id="carouselTrack">
-                        <?php
-                        $display_count = 0;
-                        foreach ($scored_related_grants as $related_grant):
-                            if ($display_count >= 12) break;
-                            $display_count++;
-                            $related_id = $related_grant['id'];
-                            $post = get_post($related_id);
-                            if ($post) {
-                                setup_postdata($post);
-                                ?>
-                                <div class="gus-carousel-card">
-                                    <?php get_template_part('template-parts/grant-card-unified'); ?>
-                                </div>
-                                <?php
-                            }
-                        endforeach;
-                        wp_reset_postdata();
-                        ?>
-                    </div>
-                    
-                    <button class="gus-carousel-nav gus-carousel-nav-next" id="carouselNext" type="button" aria-label="次へ">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"/>
-                        </svg>
-                    </button>
-                </div>
-                
-                <?php if (count($scored_related_grants) > 12): ?>
-                <div style="margin-top: 24px; text-align: center;">
-                    <a href="<?php echo home_url('/grants/'); ?>" class="gus-btn gus-btn-secondary" style="display: inline-flex; width: auto; min-width: 240px;">
-                        さらに補助金を探す (残り<?php echo count($scored_related_grants) - 12; ?>件)
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"/>
-                        </svg>
-                    </a>
-                </div>
-                <?php endif; ?>
-            </section>
-            <?php endif; ?>
-
-            <!-- 補助金詳細表（PC版テーブル + モバイル版カード完全版） -->
-            <section id="grant-details" class="gus-section">
-                <div class="gus-section-content">
-                    
-                    <!-- PC版テーブル（768px以上で表示） -->
-                    <div class="gus-table-wrapper">
-                        <table class="gus-table">
-                            <thead>
-                                <tr class="gus-table-title-row">
-                                    <th colspan="2" class="gus-table-title-cell">
-                                        <h1 itemprop="headline"><?php the_title(); ?></h1>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($formatted_amount): ?>
-                                <tr>
-                                    <th>補助金額<div style="font-size: 10px; font-weight: 500; color: #aaa;">(最大)</div></th>
-                                    <td><strong style="font-size: var(--gus-text-xl); color: #DC2626;"><?php echo esc_html($formatted_amount); ?></strong></td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <?php if ($grant_data['subsidy_rate']): ?>
-                                <tr>
-                                    <th>補助率</th>
-                                    <td><?php echo esc_html($grant_data['subsidy_rate']); ?>
-                                        <?php if ($grant_data['subsidy_rate_detailed']): ?>
-
-/* ===============================================
-   NEW STYLES - DL Tag & Template Parts
-   =============================================== */
-
-/* Detail List (DL Tag) - PC/SP Unified */
-.gus-detail-list {
-    display: grid;
-    gap: 0;
-    margin: 0;
-    border: 1px solid var(--gus-gray-300);
-    border-radius: var(--gus-radius);
-    overflow: hidden;
-    background: var(--gus-white);
-}
-
-.gus-detail-item {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    border-bottom: 1px solid var(--gus-gray-200);
-    min-height: 48px;
-}
-
-.gus-detail-item:last-child {
-    border-bottom: none;
-}
-
-.gus-detail-term {
-    padding: 16px;
-    background: var(--gus-gray-50);
-    font-weight: 600;
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-700);
-    display: flex;
-    align-items: center;
-    border-right: 1px solid var(--gus-gray-200);
-    margin: 0;
-}
-
-.gus-detail-desc {
-    padding: 16px;
-    font-size: var(--gus-text-base);
-    color: var(--gus-gray-800);
-    line-height: 1.7;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 8px;
-}
-
-.gus-detail-highlight .gus-detail-desc {
-    font-size: 20px;
-    font-weight: 700;
-    color: #DC2626;
-}
-
-.gus-detail-urgent .gus-detail-desc strong {
-    color: #DC2626;
-}
-
-.gus-detail-sub {
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-600);
-    margin-top: 4px;
-}
-
-.gus-detail-note {
-    font-size: var(--gus-text-xs);
-    color: #B8860B;
-    margin-top: 4px;
-    padding: 4px 8px;
-    background: #FFFBEB;
-    border-radius: 4px;
-    display: inline-block;
-}
-
-.gus-detail-meta {
-    background: var(--gus-gray-50);
-}
-
-/* Difficulty Display */
-.gus-difficulty-display {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.gus-difficulty-label {
-    font-weight: 700;
-    font-size: var(--gus-text-md);
-}
-
-.gus-difficulty-dots {
-    display: flex;
-    gap: 4px;
-}
-
-.gus-difficulty-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--gus-gray-300);
-    transition: var(--gus-transition);
-}
-
-.gus-difficulty-dot.filled {
-    background: var(--gus-black);
-}
-
-.gus-difficulty-desc {
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-600);
-}
-
-/* Tags Section */
-.gus-tags-section {
-    margin-top: 24px;
-    padding-top: 24px;
-    border-top: 2px solid var(--gus-gray-200);
-}
-
-.gus-tags-group {
-    margin-bottom: 16px;
-}
-
-.gus-tags-group:last-child {
-    margin-bottom: 0;
-}
-
-.gus-tags-label {
-    font-size: var(--gus-text-sm);
-    font-weight: 600;
-    color: var(--gus-gray-700);
-    margin-bottom: 8px;
-    display: block;
-}
-
-.gus-tags-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.gus-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 12px;
-    background: var(--gus-gray-100);
-    color: var(--gus-gray-700);
-    font-size: var(--gus-text-sm);
-    border-radius: 16px;
-    text-decoration: none;
-    transition: var(--gus-transition);
-    border: 1px solid var(--gus-gray-200);
-}
-
-.gus-tag:hover {
-    background: var(--gus-black);
-    color: var(--gus-white);
-    border-color: var(--gus-black);
-    transform: translateY(-1px);
-}
-
-.gus-tag-category {
-    background: #EFF6FF;
-    color: #1E40AF;
-    border-color: #BFDBFE;
-}
-
-.gus-tag-category:hover {
-    background: #1E40AF;
-    color: var(--gus-white);
-    border-color: #1E40AF;
-}
-
-.gus-tag-tag {
-    font-family: 'Courier New', monospace;
-}
-
-/* Header Components */
-.gus-breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-600);
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-}
-
-.gus-breadcrumb a {
-    color: var(--gus-gray-600);
-    text-decoration: none;
-    transition: var(--gus-transition);
-}
-
-.gus-breadcrumb a:hover {
-    color: var(--gus-black);
-}
-
-.gus-breadcrumb .separator {
-    color: var(--gus-gray-400);
-}
-
-.gus-breadcrumb .current {
-    color: var(--gus-gray-800);
-    font-weight: 500;
-}
-
-.gus-status-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    background: var(--gus-gray-50);
-    border-radius: var(--gus-radius);
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.gus-status-bar.status-open {
-    background: #ECFDF5;
-    border: 1px solid #10B981;
-}
-
-.gus-status-bar.status-closed {
-    background: var(--gus-gray-100);
-    border: 1px solid var(--gus-gray-400);
-}
-
-.gus-status-badge {
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: var(--gus-text-sm);
-    font-weight: 600;
-}
-
-.status-open .gus-status-badge {
-    background: #10B981;
-    color: var(--gus-white);
-}
-
-.status-closed .gus-status-badge {
-    background: var(--gus-gray-500);
-    color: var(--gus-white);
-}
-
-.gus-meta-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.gus-views-count {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-600);
-}
-
-.gus-favorite-btn,
-.gus-share-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: var(--gus-white);
-    border: 1px solid var(--gus-gray-300);
-    border-radius: 6px;
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-700);
-    cursor: pointer;
-    transition: var(--gus-transition);
-}
-
-.gus-favorite-btn:hover,
-.gus-share-btn:hover {
-    border-color: var(--gus-black);
-    background: var(--gus-gray-50);
-}
-
-.gus-favorite-btn.is-favorite {
-    background: #FEE2E2;
-    border-color: #DC2626;
-    color: #DC2626;
-}
-
-.gus-favorite-btn.is-favorite svg {
-    fill: #DC2626;
-}
-
-/* Hero Grid */
-.gus-hero-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin: 24px 0;
-}
-
-.gus-hero-item {
-    padding: 16px;
-    background: var(--gus-gray-50);
-    border: 1px solid var(--gus-gray-200);
-    border-radius: var(--gus-radius);
-    text-align: center;
-}
-
-.gus-hero-amount {
-    background: #FEF2F2;
-    border-color: #FCA5A5;
-}
-
-.gus-hero-deadline.urgent {
-    background: #FEF2F2;
-    border-color: #DC2626;
-}
-
-.gus-hero-label {
-    font-size: var(--gus-text-xs);
-    color: var(--gus-gray-600);
-    margin-bottom: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.gus-hero-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--gus-gray-900);
-}
-
-.gus-hero-amount .gus-hero-value {
-    color: #DC2626;
-    font-size: 24px;
-}
-
-.gus-hero-deadline.urgent .gus-hero-value {
-    color: #DC2626;
-}
-
-/* CTA Buttons */
-.gus-cta-buttons {
-    display: flex;
-    gap: 12px;
-    margin: 24px 0;
-    flex-wrap: wrap;
-}
-
-.gus-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-radius: var(--gus-radius);
-    font-size: var(--gus-text-base);
-    font-weight: 600;
-    text-decoration: none;
-    border: 2px solid;
-    cursor: pointer;
-    transition: var(--gus-transition);
-}
-
-.gus-btn-primary {
-    background: var(--gus-black);
-    color: var(--gus-white);
-    border-color: var(--gus-black);
-}
-
-.gus-btn-primary:hover {
-    background: var(--gus-gray-900);
-    transform: translateY(-2px);
-    box-shadow: var(--gus-shadow-lg);
-}
-
-.gus-btn-secondary {
-    background: var(--gus-white);
-    color: var(--gus-black);
-    border-color: var(--gus-gray-300);
-}
-
-.gus-btn-secondary:hover {
-    border-color: var(--gus-black);
-    background: var(--gus-gray-50);
-}
-
-.gus-btn-outline {
-    background: transparent;
-    color: var(--gus-black);
-    border-color: var(--gus-black);
-}
-
-.gus-btn-outline:hover {
-    background: var(--gus-black);
-    color: var(--gus-white);
-}
-
-/* AI Summary Box */
-.gus-ai-summary {
-    background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
-    border: 2px solid var(--gus-gray-300);
-    border-radius: var(--gus-radius);
-    padding: 24px;
-    margin: 32px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.gus-ai-summary::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(180deg, var(--gus-black) 0%, var(--gus-gray-600) 100%);
-}
-
-.gus-ai-summary-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.gus-ai-icon {
-    width: 40px;
-    height: 40px;
-    background: var(--gus-black);
-    color: var(--gus-white);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.gus-ai-summary-title {
-    font-size: var(--gus-text-lg);
-    font-weight: 700;
-    margin: 0;
-    flex: 1;
-}
-
-.gus-ai-badge {
-    padding: 4px 10px;
-    background: var(--gus-black);
-    color: var(--gus-white);
-    font-size: var(--gus-text-xs);
-    border-radius: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.gus-ai-summary-content {
-    font-size: var(--gus-text-base);
-    line-height: 1.8;
-    color: var(--gus-gray-800);
-}
-
-.gus-ai-summary-content p {
-    margin: 0 0 12px 0;
-}
-
-.gus-ai-summary-content p:last-child {
-    margin-bottom: 0;
-}
-
-.gus-ai-summary-footer {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--gus-gray-300);
-}
-
-.gus-ai-disclaimer {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: var(--gus-text-xs);
-    color: var(--gus-gray-600);
-    margin: 0;
-}
-
-/* Related Columns */
-.gus-related-columns {
-    margin: 48px 0;
-}
-
-.gus-section-header {
-    margin-bottom: 24px;
-}
-
-.gus-section-title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: var(--gus-text-2xl);
-    font-weight: 700;
-    margin: 0 0 8px 0;
-    color: var(--gus-gray-900);
-}
-
-.gus-section-desc {
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-600);
-    margin: 0;
-}
-
-.gus-columns-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
-    margin-bottom: 24px;
-}
-
-.gus-column-card {
-    background: var(--gus-white);
-    border: 1px solid var(--gus-gray-200);
-    border-radius: var(--gus-radius);
-    overflow: hidden;
-    transition: var(--gus-transition);
-    display: flex;
-    flex-direction: column;
-}
-
-.gus-column-card:hover {
-    border-color: var(--gus-black);
-    box-shadow: var(--gus-shadow-lg);
-    transform: translateY(-4px);
-}
-
-.gus-column-thumbnail {
-    width: 100%;
-    height: 180px;
-    overflow: hidden;
-}
-
-.gus-column-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: var(--gus-transition);
-}
-
-.gus-column-card:hover .gus-column-thumbnail img {
-    transform: scale(1.05);
-}
-
-.gus-column-content {
-    padding: 20px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.gus-column-category {
-    display: inline-block;
-    padding: 4px 10px;
-    background: var(--gus-black);
-    color: var(--gus-white);
-    font-size: var(--gus-text-xs);
-    border-radius: 4px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    width: fit-content;
-}
-
-.gus-column-title {
-    font-size: var(--gus-text-lg);
-    font-weight: 600;
-    margin: 0 0 12px 0;
-    line-height: 1.4;
-}
-
-.gus-column-title a {
-    color: var(--gus-gray-900);
-    text-decoration: none;
-    transition: var(--gus-transition);
-}
-
-.gus-column-title a:hover {
-    color: var(--gus-black);
-}
-
-.gus-column-excerpt {
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-600);
-    line-height: 1.6;
-    margin: 0 0 16px 0;
-    flex: 1;
-}
-
-.gus-column-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: var(--gus-text-xs);
-    color: var(--gus-gray-500);
-    margin-bottom: 12px;
-}
-
-.gus-column-date,
-.gus-column-reading-time {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.gus-column-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: var(--gus-text-sm);
-    font-weight: 600;
-    color: var(--gus-black);
-    text-decoration: none;
-    transition: var(--gus-transition);
-}
-
-.gus-column-link:hover {
-    gap: 10px;
-}
-
-.gus-columns-footer {
-    text-align: center;
-    padding-top: 24px;
-    border-top: 1px solid var(--gus-gray-200);
-}
-
-/* Floating AI Chat */
-.gus-floating-ai-chat {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 9999;
-}
-
-.gus-ai-chat-trigger {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--gus-black);
-    color: var(--gus-white);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    transition: var(--gus-transition);
-    position: relative;
-}
-
-.gus-ai-chat-trigger:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-.gus-ai-icon-close {
-    display: none;
-}
-
-.gus-ai-chat-trigger.active .gus-ai-icon-default {
-    display: none;
-}
-
-.gus-ai-chat-trigger.active .gus-ai-icon-close {
-    display: block;
-}
-
-.gus-ai-chat-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 24px;
-    height: 24px;
-    background: #DC2626;
-    color: var(--gus-white);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 700;
-    border: 2px solid var(--gus-white);
-}
-
-/* AI Chat Window */
-.gus-ai-chat-window {
-    position: fixed;
-    bottom: 96px;
-    right: 24px;
-    width: 380px;
-    max-height: 600px;
-    background: var(--gus-white);
-    border: 2px solid var(--gus-gray-300);
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    z-index: 9998;
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    transform: scale(0.9);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.gus-ai-chat-window.active {
-    display: flex;
-    transform: scale(1);
-    opacity: 1;
-}
-
-.gus-ai-chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--gus-black) 0%, #1a1a1a 100%);
-    color: var(--gus-white);
-    border-bottom: 1px solid var(--gus-gray-300);
-}
-
-.gus-ai-chat-header-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-}
-
-.gus-ai-avatar {
-    width: 36px;
-    height: 36px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.gus-ai-chat-title-wrap {
-    flex: 1;
-}
-
-.gus-ai-chat-title {
-    font-size: var(--gus-text-md);
-    font-weight: 700;
-    margin: 0;
-}
-
-.gus-ai-chat-subtitle {
-    font-size: var(--gus-text-xs);
-    opacity: 0.8;
-    margin: 0;
-}
-
-.gus-ai-chat-close {
-    width: 32px;
-    height: 32px;
-    background: transparent;
-    border: none;
-    color: var(--gus-white);
-    cursor: pointer;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--gus-transition);
-}
-
-.gus-ai-chat-close:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.gus-ai-chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-    background: var(--gus-gray-50);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.gus-ai-message {
-    display: flex;
-    gap: 12px;
-    animation: messageSlideIn 0.3s ease-out;
-}
-
-@keyframes messageSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.gus-ai-message-avatar {
-    width: 32px;
-    height: 32px;
-    background: var(--gus-black);
-    color: var(--gus-white);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.gus-ai-message-user .gus-ai-message-avatar {
-    background: var(--gus-gray-300);
-    color: var(--gus-gray-700);
-}
-
-.gus-ai-message-content {
-    flex: 1;
-}
-
-.gus-ai-message-content p {
-    background: var(--gus-white);
-    padding: 12px;
-    border-radius: 8px;
-    margin: 0;
-    font-size: var(--gus-text-sm);
-    line-height: 1.6;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.gus-ai-message-user .gus-ai-message-content p {
-    background: var(--gus-black);
-    color: var(--gus-white);
-}
-
-.gus-ai-suggestions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.gus-ai-suggestion {
-    padding: 10px 14px;
-    background: var(--gus-white);
-    border: 1px solid var(--gus-gray-300);
-    border-radius: 6px;
-    font-size: var(--gus-text-sm);
-    color: var(--gus-gray-700);
-    text-align: left;
-    cursor: pointer;
-    transition: var(--gus-transition);
-}
-
-.gus-ai-suggestion:hover {
-    background: var(--gus-black);
-    color: var(--gus-white);
-    border-color: var(--gus-black);
-}
-
-.gus-ai-chat-input-wrapper {
-    border-top: 1px solid var(--gus-gray-200);
-    background: var(--gus-white);
-}
-
-.gus-ai-chat-typing {
-    padding: 12px 16px;
-    background: var(--gus-gray-50);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 1px solid var(--gus-gray-200);
-}
-
-.gus-typing-dots {
-    display: flex;
-    gap: 4px;
-}
-
-.gus-typing-dots span {
-    width: 8px;
-    height: 8px;
-    background: var(--gus-gray-400);
-    border-radius: 50%;
-    animation: typingDot 1.4s infinite;
-}
-
-.gus-typing-dots span:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.gus-typing-dots span:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-@keyframes typingDot {
-    0%, 60%, 100% {
-        transform: scale(1);
-        opacity: 0.5;
-    }
-    30% {
-        transform: scale(1.2);
-        opacity: 1;
-    }
-}
-
-.gus-typing-text {
-    font-size: var(--gus-text-xs);
-    color: var(--gus-gray-600);
-}
-
-.gus-ai-chat-input-form {
-    display: flex;
-    gap: 8px;
-    padding: 12px;
-}
-
-.gus-ai-chat-input {
-    flex: 1;
-    padding: 10px 14px;
-    border: 1px solid var(--gus-gray-300);
-    border-radius: 6px;
-    font-size: var(--gus-text-sm);
-    font-family: inherit;
-    transition: var(--gus-transition);
-}
-
-.gus-ai-chat-input:focus {
-    outline: none;
-    border-color: var(--gus-black);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
-}
-
-.gus-ai-chat-send {
-    width: 40px;
-    height: 40px;
-    background: var(--gus-black);
-    color: var(--gus-white);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--gus-transition);
-    flex-shrink: 0;
-}
-
-.gus-ai-chat-send:hover {
-    background: var(--gus-gray-900);
-    transform: scale(1.05);
-}
-
-.gus-ai-chat-send:disabled {
-    background: var(--gus-gray-300);
-    cursor: not-allowed;
-    transform: none;
-}
-
-.gus-ai-chat-input-wrapper .gus-ai-disclaimer {
-    padding: 8px 12px;
-    background: var(--gus-gray-50);
-}
-
-.gus-ai-chat-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9997;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.gus-ai-chat-overlay.active {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Responsive - DL Tags */
-@media (max-width: 768px) {
-    .gus-detail-item {
-        grid-template-columns: 1fr;
-    }
-    
-    .gus-detail-term {
-        border-right: none;
-        border-bottom: 1px solid var(--gus-gray-200);
-        padding: 12px;
-        background: var(--gus-white);
-        font-weight: 700;
-        color: var(--gus-gray-900);
-    }
-    
-    .gus-detail-desc {
-        padding: 12px;
-    }
-    
-    .gus-hero-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .gus-cta-buttons {
-        flex-direction: column;
-    }
-    
-    .gus-btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .gus-columns-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .gus-ai-chat-window {
-        width: calc(100% - 32px);
-        right: 16px;
-        bottom: 80px;
-        max-height: calc(100vh - 120px);
-    }
-    
-    .gus-floating-ai-chat {
-        right: 16px;
-        bottom: 16px;
-    }
-    
-    .gus-meta-actions {
-        flex-wrap: wrap;
-    }
-    
-    .gus-status-bar {
-        flex-direction: column;
-        align-items: flex-start;
     }
 }

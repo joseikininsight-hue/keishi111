@@ -1,3 +1,155 @@
+document.addEventListener('DOMContentLoaded', function() {
+    'use strict';
+    
+    // ===============================================
+    // カルーセル機能
+    // ===============================================
+    const carouselTrack = document.getElementById('carouselTrack');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
+    
+    if (carouselTrack && prevBtn && nextBtn) {
+        const scrollAmount = 336;
+        
+        function updateButtons() {
+            const scrollLeft = carouselTrack.scrollLeft;
+            const maxScroll = carouselTrack.scrollWidth - carouselTrack.clientWidth;
+            
+            prevBtn.disabled = scrollLeft <= 0;
+            nextBtn.disabled = scrollLeft >= maxScroll - 10;
+        }
+        
+        prevBtn.addEventListener('click', function() {
+            carouselTrack.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+        
+        nextBtn.addEventListener('click', function() {
+            carouselTrack.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+        
+        carouselTrack.addEventListener('scroll', updateButtons);
+        window.addEventListener('resize', updateButtons);
+        updateButtons();
+    }
+    
+    // ===============================================
+    // PC AI Chat
+    // ===============================================
+    const pcPermanentInput = document.getElementById('pcPermanentInput');
+    const pcPermanentSend = document.getElementById('pcPermanentSend');
+    const pcPermanentMessages = document.getElementById('pcPermanentMessages');
+    const pcPermanentSuggestions = document.querySelectorAll('.gus-pc-ai-permanent-suggestion');
+    
+    if (pcPermanentSuggestions) {
+        pcPermanentSuggestions.forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                if (pcPermanentInput) {
+                    pcPermanentInput.value = question;
+                    pcPermanentInput.focus();
+                    if (pcPermanentSend) {
+                        pcPermanentSend.click();
+                    }
+                }
+            });
+        });
+    }
+    
+    async function sendPcPermanentQuestion() {
+        const question = pcPermanentInput.value.trim();
+        if (!question) return;
+        
+        addPcPermanentMessage(question, 'user');
+        pcPermanentInput.value = '';
+        pcPermanentInput.style.height = 'auto';
+        pcPermanentSend.disabled = true;
+        
+        const typingId = showPcPermanentTyping();
+        
+        try {
+            const formData = new FormData();
+            formData.append('action', 'handle_grant_ai_question');
+            formData.append('nonce', '<?php echo wp_create_nonce("gi_ajax_nonce"); ?>');
+            formData.append('post_id', '<?php echo $post_id; ?>');
+            formData.append('question', question);
+            
+            const response = await fetch('<?php echo admin_url("admin-ajax.php"); ?>', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            removePcPermanentTyping(typingId);
+            
+            if (data.success && data.data && data.data.answer) {
+                addPcPermanentMessage(data.data.answer, 'assistant');
+            } else {
+                addPcPermanentMessage('申し訳ございません。回答の生成に失敗しました。', 'assistant');
+            }
+        } catch (error) {
+            console.error('PC AI質問エラー:', error);
+            removePcPermanentTyping(typingId);
+            addPcPermanentMessage('通信エラーが発生しました。もう一度お試しください。', 'assistant');
+        } finally {
+            pcPermanentSend.disabled = false;
+        }
+    }
+    
+    function addPcPermanentMessage(content, type) {
+        if (!pcPermanentMessages) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'gus-ai-message gus-ai-message--' + type;
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'gus-ai-message-avatar';
+        avatar.innerHTML = type === 'assistant' 
+            ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>'
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'gus-ai-message-content';
+        contentDiv.innerHTML = content.replace(/\n/g, '<br>');
+        
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(contentDiv);
+        pcPermanentMessages.appendChild(messageDiv);
+        pcPermanentMessages.scrollTop = pcPermanentMessages.scrollHeight;
+    }
+    
+    function showPcPermanentTyping() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'gus-ai-typing';
+        typingDiv.id = 'pcPermanentTyping';
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'gus-ai-message-avatar';
+        avatar.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>';
+        
+        const dotsDiv = document.createElement('div');
+        dotsDiv.className = 'gus-ai-typing-dots';
+        dotsDiv.innerHTML = '<div class="gus-ai-typing-dot"></div><div class="gus-ai-typing-dot"></div><div class="gus-ai-typing-dot"></div>';
+        
+        typingDiv.appendChild(avatar);
+        typingDiv.appendChild(dotsDiv);
+        pcPermanentMessages.appendChild(typingDiv);
+        pcPermanentMessages.scrollTop = pcPermanentMessages.scrollHeight;
+        
+        return 'pcPermanentTyping';
+    }
+    
+    function removePcPermanentTyping(id) {
+        const typing = document.getElementById(id);
+        if (typing) typing.remove();
+    }
+    
     if (pcPermanentSend && pcPermanentInput) {
         pcPermanentSend.addEventListener('click', sendPcPermanentQuestion);
         pcPermanentInput.addEventListener('keydown', function(e) {
@@ -224,204 +376,3 @@
     
     console.log('✅ Grant Single Page v24.2 Initialized');
 });
-</script>
-
-<?php 
-get_footer(); 
-?>
-// ===============================================
-// AI Chat Functionality
-// ===============================================
-
-(function() {
-    'use strict';
-    
-    // AI Chat Elements
-    const chatTrigger = document.querySelector('.gus-ai-chat-trigger');
-    const chatWindow = document.getElementById('gusAiChatWindow');
-    const chatOverlay = document.getElementById('gusAiChatOverlay');
-    const chatClose = document.querySelector('.gus-ai-chat-close');
-    const chatForm = document.getElementById('gusAiChatForm');
-    const chatInput = document.getElementById('gusAiChatInput');
-    const chatMessages = document.getElementById('gusAiChatMessages');
-    const typingIndicator = document.getElementById('gusAiTypingIndicator');
-    
-    if (!chatTrigger || !chatWindow) return;
-    
-    // Toggle Chat Window
-    function toggleChatWindow() {
-        const isActive = chatWindow.classList.contains('active');
-        
-        if (isActive) {
-            closeChatWindow();
-        } else {
-            openChatWindow();
-        }
-    }
-    
-    function openChatWindow() {
-        chatWindow.classList.add('active');
-        chatOverlay.classList.add('active');
-        chatTrigger.classList.add('active');
-        chatInput.focus();
-    }
-    
-    function closeChatWindow() {
-        chatWindow.classList.remove('active');
-        chatOverlay.classList.remove('active');
-        chatTrigger.classList.remove('active');
-    }
-    
-    // Add Message to Chat
-    function addMessage(message, isUser = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `gus-ai-message ${isUser ? 'gus-ai-message-user' : 'gus-ai-message-bot'}`;
-        
-        messageDiv.innerHTML = `
-            <div class="gus-ai-message-avatar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    ${isUser ? 
-                        '<circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path>' :
-                        '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>'
-                    }
-                </svg>
-            </div>
-            <div class="gus-ai-message-content">
-                <p>${message}</p>
-            </div>
-        `;
-        
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-    
-    // Send Message
-    async function sendMessage(question) {
-        if (!question.trim()) return;
-        
-        // Add user message
-        addMessage(question, true);
-        chatInput.value = '';
-        
-        // Show typing indicator
-        typingIndicator.style.display = 'flex';
-        
-        try {
-            const response = await fetch(giSingleGrantSettings.ajaxUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    action: 'gi_ai_question',
-                    post_id: giSingleGrantSettings.postId,
-                    question: question,
-                    nonce: giSingleGrantSettings.nonce
-                })
-            });
-            
-            const data = await response.json();
-            
-            // Hide typing indicator
-            typingIndicator.style.display = 'none';
-            
-            if (data.success) {
-                addMessage(data.data.answer, false);
-            } else {
-                addMessage('申し訳ありません。エラーが発生しました。もう一度お試しください。', false);
-            }
-        } catch (error) {
-            typingIndicator.style.display = 'none';
-            addMessage('申し訳ありません。接続エラーが発生しました。', false);
-            console.error('AI Chat Error:', error);
-        }
-    }
-    
-    // Event Listeners
-    chatTrigger.addEventListener('click', toggleChatWindow);
-    chatClose.addEventListener('click', closeChatWindow);
-    chatOverlay.addEventListener('click', closeChatWindow);
-    
-    chatForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        sendMessage(chatInput.value);
-    });
-    
-    // Suggestion Buttons
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('gus-ai-suggestion')) {
-            const question = e.target.dataset.question;
-            sendMessage(question);
-        }
-    });
-    
-    // Favorite Button
-    document.addEventListener('click', function(e) {
-        const favoriteBtn = e.target.closest('.gus-favorite-btn');
-        if (!favoriteBtn) return;
-        
-        e.preventDefault();
-        const postId = favoriteBtn.dataset.postId;
-        
-        fetch(giSingleGrantSettings.ajaxUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                action: 'gi_toggle_favorite',
-                post_id: postId,
-                nonce: giSingleGrantSettings.nonce
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                favoriteBtn.classList.toggle('is-favorite');
-                const svg = favoriteBtn.querySelector('svg');
-                const span = favoriteBtn.querySelector('span');
-                
-                if (data.data.is_favorite) {
-                    svg.setAttribute('fill', 'currentColor');
-                    span.textContent = 'お気に入り済み';
-                } else {
-                    svg.setAttribute('fill', 'none');
-                    span.textContent = 'お気に入り';
-                }
-            }
-        })
-        .catch(error => console.error('Favorite Error:', error));
-    });
-    
-    // Print Button
-    const printBtn = document.querySelector('.gus-print-btn');
-    if (printBtn) {
-        printBtn.addEventListener('click', function() {
-            window.print();
-        });
-    }
-    
-    // Share Button
-    const shareBtn = document.querySelector('.gus-share-btn');
-    if (shareBtn) {
-        shareBtn.addEventListener('click', async function() {
-            const shareData = {
-                title: document.title,
-                text: document.querySelector('meta[name="description"]')?.content || '',
-                url: window.location.href
-            };
-            
-            try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                } else {
-                    // Fallback: Copy to clipboard
-                    await navigator.clipboard.writeText(window.location.href);
-                    alert('URLをコピーしました');
-                }
-            } catch (error) {
-                console.log('Share Error:', error);
-            }
-        });
-    }
-})();
