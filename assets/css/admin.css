@@ -1,0 +1,1155 @@
+/*!
+ * Grant Insight Perfect - 管理画面統合CSS
+ * admin-consolidated.css + amount-fixer.css + sheets-admin.css
+ * 
+ * @version 2.0.0
+ * @date 2025-11-12
+ * @description 管理画面専用スタイル（重複削除・最適化済み）
+ */
+
+/* ===============================================
+   共通CSS変数
+   =============================================== */
+:root {
+    /* WordPress管理画面カラー */
+    --admin-primary: #2271b1;
+    --admin-primary-dark: #135e96;
+    --admin-secondary: #f6f7f7;
+    --admin-border: #c3c4c7;
+    --admin-text: #1d2327;
+    --admin-text-light: #646970;
+    --admin-success: #00875a;
+    --admin-warning: #c19000;
+    --admin-error: #d63638;
+    --admin-error-dark: #b32d2e;
+    
+    /* 背景色 */
+    --admin-bg-white: #ffffff;
+    --admin-bg-light: #f9f9f9;
+    --admin-bg-gray: #f6f7f7;
+    
+    /* ボーダー・シャドウ */
+    --admin-shadow: 0 1px 1px rgba(0,0,0,.04);
+    --admin-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    /* スペーシング */
+    --admin-space-sm: 8px;
+    --admin-space-md: 15px;
+    --admin-space-lg: 20px;
+    
+    /* アニメーション */
+    --admin-transition: 0.2s ease;
+}
+
+/* ===============================================
+   ========== 1. 助成金投稿メタボックス ==========
+   =============================================== */
+
+/* メタボックス全体 */
+.grant-metabox-content {
+    padding: 0;
+    font-size: 13px;
+}
+
+.grant-metabox-content p {
+    margin-bottom: 15px;
+}
+
+.grant-metabox-content label {
+    display: block;
+    font-weight: 600;
+    color: var(--admin-text);
+    margin-bottom: 4px;
+}
+
+.grant-metabox-content small {
+    display: block;
+    color: var(--admin-text-light);
+    font-style: italic;
+    margin-top: 4px;
+}
+
+/* 入力フィールド */
+.grant-metabox-content input[type="text"],
+.grant-metabox-content input[type="url"],
+.grant-metabox-content input[type="email"],
+.grant-metabox-content input[type="date"],
+.grant-metabox-content input[type="number"],
+.grant-metabox-content textarea,
+.grant-metabox-content select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.grant-metabox-content textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* チェックボックス・ラジオボタン */
+.grant-metabox-content input[type="checkbox"],
+.grant-metabox-content input[type="radio"] {
+    margin-right: 8px;
+}
+
+/* フィールドグループ */
+.grant-field-group {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: var(--admin-bg-light);
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+}
+
+.grant-field-group h4 {
+    margin: 0 0 15px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--admin-text);
+    border-bottom: 1px solid #e1e1e1;
+    padding-bottom: 8px;
+}
+
+/* 複数列レイアウト */
+.grant-field-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.grant-field-row > div {
+    flex: 1;
+}
+
+/* 状態表示 */
+.grant-status-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.grant-status-active { 
+    background: #7ad03a; 
+    color: white; 
+}
+
+.grant-status-soon { 
+    background: #ffba00; 
+    color: white; 
+}
+
+.grant-status-expired { 
+    background: var(--admin-error); 
+    color: white; 
+}
+
+/* ===============================================
+   ========== 2. Google Sheets管理画面 ==========
+   =============================================== */
+
+/* Sync Page Container */
+.gi-sheets-sync-wrap {
+    max-width: 1200px;
+    margin: 20px 0;
+}
+
+.gi-sheets-sync-header {
+    background: var(--admin-bg-white);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: var(--admin-shadow);
+}
+
+.gi-sheets-sync-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+.gi-sheets-sync-header p {
+    margin: 0;
+    color: var(--admin-text-light);
+}
+
+/* カードスタイル */
+.gi-sheets-card {
+    background: var(--admin-bg-white);
+    border: 1px solid var(--admin-border);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: var(--admin-shadow);
+}
+
+.gi-sheets-card h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--admin-text);
+}
+
+.gi-sheets-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--admin-text);
+    margin-bottom: 12px;
+    margin-top: 20px;
+}
+
+/* 接続ステータス */
+#connection-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.status-connected {
+    background: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #a3cfbb;
+}
+
+.status-disconnected {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f1aeb5;
+}
+
+.status-connecting {
+    background: #fff3cd;
+    color: #664d03;
+    border: 1px solid #ffecb5;
+}
+
+/* Sync Actions */
+.gi-sync-actions {
+    background: var(--admin-bg-white);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: var(--admin-shadow);
+}
+
+.gi-sync-actions h2 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.gi-sync-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ボタン統一スタイル */
+.gi-sheets-btn,
+.gi-sync-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--admin-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--admin-transition);
+}
+
+.gi-sheets-btn:hover,
+.gi-sync-button:hover:not(:disabled) {
+    background: var(--admin-primary-dark);
+    color: white;
+}
+
+.gi-sheets-btn.secondary,
+.gi-sync-button-secondary {
+    background: var(--admin-secondary);
+    color: #2c3338;
+    border: 1px solid var(--admin-border);
+}
+
+.gi-sheets-btn.secondary:hover,
+.gi-sync-button-secondary:hover:not(:disabled) {
+    background: #f0f0f1;
+    border-color: #8c8f94;
+    color: #2c3338;
+}
+
+.gi-sheets-btn.danger,
+.gi-sync-button-danger {
+    background: var(--admin-error);
+}
+
+.gi-sheets-btn.danger:hover,
+.gi-sync-button-danger:hover:not(:disabled) {
+    background: var(--admin-error-dark);
+}
+
+.gi-sheets-btn:disabled,
+.gi-sync-button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* フォーム要素 */
+.gi-sheets-form-group {
+    margin-bottom: 20px;
+}
+
+.gi-sheets-form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--admin-text);
+}
+
+.gi-sheets-form-group input[type="text"],
+.gi-sheets-form-group input[type="url"],
+.gi-sheets-form-group textarea,
+.gi-sheets-form-group select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.gi-sheets-form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+/* 設定項目 */
+.gi-sheets-setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.gi-sheets-setting-item:last-child {
+    border-bottom: none;
+}
+
+.gi-sheets-setting-label {
+    font-weight: 600;
+    color: var(--admin-text);
+}
+
+.gi-sheets-setting-description {
+    font-size: 13px;
+    color: var(--admin-text-light);
+    margin-top: 4px;
+}
+
+/* 統計・情報表示 */
+.gi-sheets-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.gi-sheets-stat-item {
+    background: var(--admin-bg-light);
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e1e1e1;
+}
+
+.gi-sheets-stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--admin-primary);
+    display: block;
+}
+
+.gi-sheets-stat-label {
+    font-size: 13px;
+    color: var(--admin-text-light);
+    margin-top: 4px;
+}
+
+/* Sync Status */
+.gi-sync-status {
+    background: var(--admin-bg-white);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: var(--admin-shadow);
+}
+
+.gi-sync-status h2 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.gi-status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.gi-status-item:last-child {
+    border-bottom: none;
+}
+
+.gi-status-label {
+    font-weight: 500;
+    color: var(--admin-text);
+}
+
+.gi-status-value {
+    color: var(--admin-text-light);
+}
+
+.gi-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.gi-status-badge-success {
+    background: #d7f0db;
+    color: var(--admin-success);
+}
+
+.gi-status-badge-warning {
+    background: #fff8e1;
+    color: var(--admin-warning);
+}
+
+.gi-status-badge-error {
+    background: #ffd6d9;
+    color: #c31d1d;
+}
+
+/* ログ表示 */
+.gi-sheets-log,
+.gi-sync-log {
+    background: var(--admin-bg-light);
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.gi-sync-log {
+    background: var(--admin-bg-white);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: var(--admin-shadow);
+}
+
+.gi-sync-log h2 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.gi-log-container {
+    background: var(--admin-bg-gray);
+    border: 1px solid #dcdcde;
+    border-radius: 3px;
+    padding: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.gi-sheets-log-entry,
+.gi-log-entry {
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+.gi-log-entry {
+    padding: 5px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.gi-log-entry:last-child {
+    border-bottom: none;
+}
+
+.gi-log-timestamp {
+    color: var(--admin-text-light);
+    margin-right: 10px;
+}
+
+.gi-log-message {
+    color: var(--admin-text);
+}
+
+.gi-sheets-log-entry.success,
+.gi-log-success {
+    background: #d1e7dd;
+    color: var(--admin-success);
+}
+
+.gi-sheets-log-entry.error,
+.gi-log-error {
+    background: #f8d7da;
+    color: var(--admin-error);
+}
+
+.gi-sheets-log-entry.warning,
+.gi-log-warning {
+    background: #fff3cd;
+    color: var(--admin-warning);
+}
+
+.gi-sheets-log-entry.info {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+/* プログレスバー */
+.gi-sheets-progress,
+.gi-progress-container {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.gi-progress-container {
+    margin: 15px 0;
+}
+
+.gi-sheets-progress-bar,
+.gi-progress-bar {
+    width: 100%;
+    height: 30px;
+    background: #f0f0f1;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.gi-progress-bar {
+    border: 1px solid #dcdcde;
+    border-radius: 3px;
+}
+
+.gi-sheets-progress-fill,
+.gi-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--admin-primary), #00a0d2);
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gi-progress-fill {
+    background: linear-gradient(90deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
+}
+
+.gi-sheets-progress-text,
+.gi-progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.gi-progress-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--admin-text);
+    z-index: 1;
+}
+
+/* Loading Spinner */
+.gi-loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: gi-spin 0.8s linear infinite;
+}
+
+@keyframes gi-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Connection Test */
+.gi-connection-test {
+    background: var(--admin-bg-white);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: var(--admin-shadow);
+}
+
+.gi-test-result {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 3px;
+    display: none;
+}
+
+.gi-test-result.show {
+    display: block;
+}
+
+.gi-test-result-success {
+    background: #d7f0db;
+    border: 1px solid var(--admin-success);
+    color: var(--admin-success);
+}
+
+.gi-test-result-error {
+    background: #ffd6d9;
+    border: 1px solid #c31d1d;
+    color: #c31d1d;
+}
+
+/* 通知・アラート */
+.gi-sheets-notice {
+    padding: 12px 16px;
+    margin: 15px 0;
+    border-left: 4px solid;
+    border-radius: 0 4px 4px 0;
+}
+
+.gi-sheets-notice.success {
+    background: #d1e7dd;
+    border-color: #0f5132;
+    color: #0f5132;
+}
+
+.gi-sheets-notice.error {
+    background: #f8d7da;
+    border-color: #721c24;
+    color: #721c24;
+}
+
+.gi-sheets-notice.warning {
+    background: #fff3cd;
+    border-color: #664d03;
+    color: #664d03;
+}
+
+.gi-sheets-notice.info {
+    background: #d1ecf1;
+    border-color: #0c5460;
+    color: #0c5460;
+}
+
+/* テーブル */
+.gi-sheets-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.gi-sheets-table th,
+.gi-sheets-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.gi-sheets-table th {
+    background: var(--admin-bg-light);
+    font-weight: 600;
+    color: var(--admin-text);
+}
+
+.gi-sheets-table tbody tr:hover {
+    background: var(--admin-bg-light);
+}
+
+/* タブ */
+.gi-sheets-tabs {
+    border-bottom: 1px solid var(--admin-border);
+    margin-bottom: 20px;
+}
+
+.gi-sheets-tab-list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.gi-sheets-tab {
+    margin-right: 2px;
+}
+
+.gi-sheets-tab button {
+    background: none;
+    border: none;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--admin-text-light);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.gi-sheets-tab button:hover {
+    color: var(--admin-text);
+}
+
+.gi-sheets-tab button.active {
+    color: var(--admin-primary);
+    border-bottom-color: var(--admin-primary);
+    font-weight: 600;
+}
+
+.gi-sheets-tab-content {
+    padding: 20px 0;
+}
+
+/* ===============================================
+   ========== 3. 助成金額修正ツール ==========
+   =============================================== */
+
+/* Main Container */
+.gi-amount-fixer {
+    max-width: 1200px;
+    margin: 20px 0;
+}
+
+.gi-amount-fixer h1 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* Section Styles */
+.gi-fixer-section {
+    background: var(--admin-bg-white);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: var(--admin-shadow-md);
+}
+
+.gi-fixer-section h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #23282d;
+    border-bottom: 2px solid var(--admin-primary);
+    padding-bottom: 10px;
+}
+
+.gi-fixer-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #23282d;
+}
+
+.gi-fixer-section h4 {
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Notice Boxes */
+.gi-fixer-notice {
+    background: #e7f3ff;
+    border-left: 4px solid var(--admin-primary);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.gi-fixer-notice h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: var(--admin-primary);
+}
+
+.gi-fixer-notice p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.gi-info-box {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.gi-warning-box {
+    background: #fff3e0;
+    border-left: 4px solid #ff9800;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.gi-warning-box p {
+    margin: 8px 0;
+}
+
+.gi-success-box {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.gi-success-box h2 {
+    color: #4caf50;
+    font-size: 24px;
+    margin-bottom: 15px;
+    border: none;
+    padding: 0;
+}
+
+/* Progress Bar */
+#gi-scan-progress,
+#gi-fix-progress {
+    margin: 20px 0;
+}
+
+/* Scan Results */
+.gi-scan-summary {
+    background: #f7f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.gi-scan-summary h3 {
+    margin-top: 0;
+    color: var(--admin-primary);
+}
+
+.gi-scan-summary p {
+    margin: 8px 0;
+    font-size: 15px;
+}
+
+.gi-highlight {
+    color: var(--admin-error);
+    font-size: 18px;
+}
+
+/* Post List & Table */
+.gi-post-list {
+    margin-top: 20px;
+}
+
+.gi-select-all-wrapper {
+    background: #f7f9fa;
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.gi-select-all-wrapper label {
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+
+.gi-post-list table {
+    margin-top: 15px;
+}
+
+.gi-post-list td,
+.gi-post-list th {
+    padding: 12px;
+}
+
+.gi-post-list .check-column {
+    width: 40px;
+    text-align: center;
+}
+
+.gi-post-checkbox,
+#gi-select-all,
+#gi-select-all-header {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.gi-issue {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.gi-issue:last-child {
+    border-bottom: none;
+}
+
+.gi-old-value {
+    color: var(--admin-error);
+    font-weight: 600;
+    text-decoration: line-through;
+}
+
+.gi-new-value {
+    color: #00a32a;
+    font-weight: 600;
+}
+
+/* Preview Table */
+.gi-preview-table td,
+.gi-preview-table th {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.gi-preview-table .gi-arrow {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--admin-primary);
+}
+
+/* Action Buttons */
+.gi-action-buttons {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.gi-action-buttons button {
+    min-width: 200px;
+    height: 42px;
+    font-size: 15px;
+}
+
+.button-large .dashicons {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/* Fix Results */
+.gi-fix-summary {
+    background: #f7f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.gi-fix-summary h3 {
+    margin-top: 0;
+    color: var(--admin-primary);
+}
+
+.gi-fix-summary .gi-success {
+    color: #00a32a;
+    font-size: 18px;
+}
+
+.gi-fix-summary .gi-error {
+    color: var(--admin-error);
+    font-size: 18px;
+}
+
+.gi-results-detail ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.gi-results-detail li {
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.gi-success-item {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
+.gi-error-item {
+    background: #ffebee;
+    border-left: 4px solid var(--admin-error);
+}
+
+.gi-results-detail .dashicons {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.gi-success-item .dashicons {
+    color: #4caf50;
+}
+
+.gi-error-item .dashicons {
+    color: var(--admin-error);
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gi-fixer-section {
+    animation: fadeIn 0.3s ease;
+}
+
+/* WordPress Admin Overrides */
+.gi-amount-fixer .notice {
+    margin: 15px 0;
+}
+
+.gi-amount-fixer .notice p {
+    margin: 0.5em 0;
+}
+
+/* ===============================================
+   レスポンシブ調整
+   =============================================== */
+@media (max-width: 782px) {
+    .gi-sheets-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .grant-field-row {
+        flex-direction: column;
+    }
+    
+    .gi-sheets-setting-item,
+    .gi-status-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .gi-sync-buttons {
+        flex-direction: column;
+    }
+    
+    .gi-sync-button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .gi-fixer-section {
+        padding: 20px;
+    }
+    
+    .gi-amount-fixer h1 {
+        font-size: 24px;
+    }
+    
+    .gi-fixer-section h2 {
+        font-size: 18px;
+    }
+    
+    .gi-post-list table {
+        font-size: 13px;
+    }
+    
+    .gi-post-list td,
+    .gi-post-list th {
+        padding: 8px;
+    }
+    
+    .gi-action-buttons button {
+        min-width: 100%;
+    }
+}
+
+/* ===============================================
+   プリント対応
+   =============================================== */
+@media print {
+    .gi-sheets-btn,
+    .gi-sync-button,
+    .gi-action-buttons {
+        display: none;
+    }
+    
+    .gi-sheets-card,
+    .gi-fixer-section {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+}
+
+/* ===============================================
+   投稿ID範囲エクスポート用のアニメーション
+   =============================================== */
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ID範囲エクスポート結果表示 */
+#id-range-export-result {
+    margin-top: 10px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

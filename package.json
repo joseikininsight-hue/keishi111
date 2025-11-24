@@ -1,0 +1,24 @@
+{
+  "name": "grant-insight-perfect",
+  "version": "5.2.0",
+  "description": "助成金・補助金情報サイト用WordPressテーマ - Tailwind CSS Build Edition",
+  "scripts": {
+    "dev": "tailwindcss -i ./assets/css/src/tailwind.css -o ./assets/css/tailwind-build.css --watch",
+    "build": "tailwindcss -i ./assets/css/src/tailwind.css -o ./assets/css/tailwind-build.css --minify",
+    "build:prod": "NODE_ENV=production tailwindcss -i ./assets/css/src/tailwind.css -o ./assets/css/tailwind-build.min.css --minify"
+  },
+  "keywords": [
+    "wordpress",
+    "theme",
+    "tailwindcss",
+    "grant",
+    "subsidy"
+  ],
+  "author": "Grant Insight Team",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.33"
+  }
+}
