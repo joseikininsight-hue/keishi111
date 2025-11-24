@@ -274,7 +274,7 @@ $modified_date = get_the_modified_date('c');
             </section>
             <?php endif; ?>
 
-            <!-- おすすめ補助金（横スクロール式・上部配置） -->
+            <!-- おすすめ補助金（グリッド表示） -->
             <?php if (!empty($scored_related_grants)): ?>
             <section id="related" class="gus-related-section">
                 <header class="gus-related-header">
@@ -285,377 +285,201 @@ $modified_date = get_the_modified_date('c');
                         </svg>
                     </div>
                     <div style="flex: 1;">
-                        <h2 class="gus-related-title">
-                            あなたにおすすめの補助金
-                            <span style="display: inline-block; margin-left: 12px; padding: 4px 10px; background: var(--gus-yellow); color: var(--gus-black); font-size: 12px; font-weight: 800; border-radius: 4px;">
-                                AI選定
-                            </span>
-                        </h2>
+                        <h2 class="gus-related-title">あなたにおすすめの補助金</h2>
                         <p class="gus-related-subtitle">
-                            同じ市町村・都道府県・カテゴリの補助金を優先表示（<?php echo count($scored_related_grants); ?>件のマッチ）
+                            条件が近い補助金をAIがピックアップしました
                         </p>
                     </div>
                 </header>
                 
-                <div class="gus-scroll-hint">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                    左右にスワイプして<?php echo min(count($scored_related_grants), 12); ?>件のおすすめ補助金を見る
+                <div class="gus-related-grid">
+                    <?php
+                    $display_count = 0;
+                    foreach ($scored_related_grants as $related_grant):
+                        if ($display_count >= 6) break; // 表示数は6件に制限
+                        $display_count++;
+                        $related_id = $related_grant['id'];
+                        $post = get_post($related_id);
+                        if ($post) {
+                            setup_postdata($post);
+                            get_template_part('template-parts/grant-card-unified');
+                        }
+                    endforeach;
+                    wp_reset_postdata();
+                    ?>
                 </div>
                 
-                <div class="gus-carousel-container">
-                    <button class="gus-carousel-nav gus-carousel-nav-prev" id="carouselPrev" type="button" aria-label="前へ">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="15 18 9 12 15 6"/>
-                        </svg>
-                    </button>
-                    
-                    <div class="gus-carousel-track" id="carouselTrack">
-                        <?php
-                        $display_count = 0;
-                        foreach ($scored_related_grants as $related_grant):
-                            if ($display_count >= 12) break;
-                            $display_count++;
-                            $related_id = $related_grant['id'];
-                            $post = get_post($related_id);
-                            if ($post) {
-                                setup_postdata($post);
-                                ?>
-                                <div class="gus-carousel-card">
-                                    <?php get_template_part('template-parts/grant-card-unified'); ?>
-                                </div>
-                                <?php
-                            }
-                        endforeach;
-                        wp_reset_postdata();
-                        ?>
-                    </div>
-                    
-                    <button class="gus-carousel-nav gus-carousel-nav-next" id="carouselNext" type="button" aria-label="次へ">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"/>
-                        </svg>
-                    </button>
-                </div>
-                
-                <?php if (count($scored_related_grants) > 12): ?>
                 <div style="margin-top: 24px; text-align: center;">
-                    <a href="<?php echo home_url('/grants/'); ?>" class="gus-btn gus-btn-secondary" style="display: inline-flex; width: auto; min-width: 240px;">
-                        さらに補助金を探す (残り<?php echo count($scored_related_grants) - 12; ?>件)
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"/>
-                        </svg>
+                    <a href="<?php echo home_url('/grants/'); ?>" class="gus-btn gus-btn-secondary">
+                        補助金一覧を見る
                     </a>
                 </div>
-                <?php endif; ?>
             </section>
+            
+            <style>
+            .gus-related-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr); /* PCは3列 */
+                gap: 20px;
+                padding: 0 20px;
+            }
+            @media (max-width: 768px) {
+                .gus-related-grid {
+                    grid-template-columns: repeat(2, 1fr); /* スマホは2列 */
+                    gap: 10px;
+                    padding: 0;
+                }
+            }
+            @media (max-width: 480px) {
+                .gus-related-grid {
+                    grid-template-columns: 1fr; /* 小さいスマホは1列 */
+                }
+            }
+            </style>
             <?php endif; ?>
 
-            <!-- 補助金詳細表（PC版テーブル + モバイル版カード完全版） -->
+            <!-- 補助金詳細表（PC/スマホ統一デザイン） -->
             <section id="grant-details" class="gus-section">
-                <div class="gus-section-content">
-                    
-                    <!-- PC版テーブル（768px以上で表示） -->
-                    <div class="gus-table-wrapper">
-                        <table class="gus-table">
-                            <thead>
-                                <tr class="gus-table-title-row">
-                                    <th colspan="2" class="gus-table-title-cell">
-                                        <h1 itemprop="headline"><?php the_title(); ?></h1>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($formatted_amount): ?>
-                                <tr>
-                                    <th>補助金額<div style="font-size: 10px; font-weight: 500; color: #aaa;">(最大)</div></th>
-                                    <td><strong style="font-size: var(--gus-text-xl); color: #DC2626;"><?php echo esc_html($formatted_amount); ?></strong></td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <?php if ($grant_data['subsidy_rate']): ?>
-                                <tr>
-                                    <th>補助率</th>
-                                    <td><?php echo esc_html($grant_data['subsidy_rate']); ?>
-                                        <?php if ($grant_data['subsidy_rate_detailed']): ?>
-                                            <div style="font-size: var(--gus-text-xs); color: var(--gus-gray-600); margin-top: 4px;"><?php echo wp_kses_post($grant_data['subsidy_rate_detailed']); ?></div>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <?php if ($deadline_info): ?>
-                                <tr>
-                                    <th>申請締切</th>
-                                    <td>
-                                        <strong style="<?php echo $deadline_class === 'urgent' ? 'color: #DC2626;' : ($deadline_class === 'warning' ? 'color: #F59E0B;' : ''); ?>">
-                                            <?php echo esc_html($deadline_info); ?>
-                                        </strong>
-                                        <?php if ($grant_data['application_period']): ?>
-                                            <div style="font-size: var(--gus-text-sm); color: var(--gus-gray-600); margin-top: 4px;">期間: <?php echo esc_html($grant_data['application_period']); ?></div>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <tr>
-                                    <th>難易度 / 採択率</th>
-                                    <td>
-                                        <div class="gus-difficulty" style="margin-bottom: 4px;">
-                                            <strong><?php echo $difficulty_data['label']; ?></strong>
-                                            <div class="gus-difficulty-dots">
-                                                <?php for ($i = 1; $i <= 3; $i++): ?>
-                                                    <div class="gus-difficulty-dot <?php echo $i <= $difficulty_data['dots'] ? 'filled' : ''; ?>"></div>
-                                                <?php endfor; ?>
-                                            </div>
-                                            <span style="font-size: var(--gus-text-sm); color: var(--gus-gray-600);">(<?php echo $difficulty_data['description']; ?>)</span>
-                                        </div>
-                                        <?php if ($grant_data['adoption_rate'] > 0): ?>
-                                            <div style="font-size: var(--gus-text-sm); color: var(--gus-gray-700);">採択実績: <strong><?php echo number_format($grant_data['adoption_rate'], 1); ?>%</strong></div>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                
-                                <?php if ($grant_data['organization']): ?>
-                                <tr>
-                                    <th>主催機関</th>
-                                    <td><?php echo esc_html($grant_data['organization']); ?></td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <?php if ($grant_data['grant_target']): ?>
-                                <tr>
-                                    <th>対象者・対象事業</th>
-                                    <td><?php echo wp_kses_post($grant_data['grant_target']); ?></td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <?php $expenses_content = !empty($grant_data['eligible_expenses_detailed']) ? $grant_data['eligible_expenses_detailed'] : $grant_data['eligible_expenses']; ?>
-                                <?php if ($expenses_content): ?>
-                                <tr>
-                                    <th>対象経費</th>
-                                    <td><?php echo wp_kses_post($expenses_content); ?></td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <?php $documents_content = !empty($grant_data['required_documents_detailed']) ? $grant_data['required_documents_detailed'] : $grant_data['required_documents']; ?>
-                                <?php if ($documents_content): ?>
-                                <tr>
-                                    <th>必要書類</th>
-                                    <td><?php echo wp_kses_post($documents_content); ?></td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <?php if ($prefecture_display || $municipality_display): ?>
-                                <tr>
-                                    <th>対象地域</th>
-                                    <td>
-                                        <?php echo esc_html($prefecture_display); ?>
-                                        <?php if ($municipality_display): ?>
-                                            <br><span style="font-size: var(--gus-text-sm); color: var(--gus-gray-600);">(市町村: <?php echo esc_html($municipality_display); ?>)</span>
-                                        <?php endif; ?>
-                                        <?php if ($grant_data['area_notes']): ?>
-                                            <div style="font-size: var(--gus-text-xs); color: #B8860B; margin-top: 4px;"><?php echo esc_html($grant_data['area_notes']); ?></div>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <?php if ($grant_data['application_method']): ?>
-                                <tr>
-                                    <th>申請方法</th>
-                                    <td><?php echo nl2br(esc_html($grant_data['application_method'])); ?></td>
-                                </tr>
-                                <?php endif; ?>
-                                
-                                <tr>
-                                    <th>更新状況</th>
-                                    <td>
-                                        最終更新: <?php echo get_the_modified_date('Y年n月j日'); ?> / 閲覧数: <?php echo number_format($grant_data['views_count']); ?> 回
-                                    </td>
-                                </tr>
-                            </tbody>
-                            
-                            <!-- タグ行 -->
-                            <?php if ($taxonomies['categories'] || $taxonomies['tags']): ?>
-                            <tfoot>
-                                <tr class="gus-table-tags-row">
-                                    <td colspan="2" class="gus-table-tags-cell">
-                                        <div class="gus-table-tags-container">
-                                            <?php if ($taxonomies['categories']): ?>
-                                            <div class="gus-table-tags-section">
-                                                <div class="gus-table-tags-label">カテゴリー</div>
-                                                <div class="gus-table-tags">
-                                                    <?php foreach ($taxonomies['categories'] as $cat): ?>
-                                                        <a href="<?php echo get_term_link($cat); ?>" class="gus-table-tag">
-                                                            <?php echo esc_html($cat->name); ?>
-                                                        </a>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            </div>
-                                            <?php endif; ?>
-                                            
-                                            <?php if ($taxonomies['tags']): ?>
-                                            <div class="gus-table-tags-section">
-                                                <div class="gus-table-tags-label">タグ</div>
-                                                <div class="gus-table-tags">
-                                                    <?php foreach ($taxonomies['tags'] as $tag): ?>
-                                                        <a href="<?php echo get_term_link($tag); ?>" class="gus-table-tag">
-                                                            #<?php echo esc_html($tag->name); ?>
-                                                        </a>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                            <?php endif; ?>
-                        </table>
+                <div class="gus-spec-table-wrapper">
+                    <div class="gus-spec-header">
+                        <span class="gus-spec-badge">制度概要</span>
+                        <h1 class="gus-spec-title" itemprop="headline"><?php the_title(); ?></h1>
                     </div>
-                    
-                    <!-- モバイル版カード（768px以下で表示・ACF全項目対応） -->
-                    <div class="gus-mobile-table-card-container">
-                        <!-- 基本情報カード -->
-                        <div class="gus-mobile-table-card">
-                            <h2 style="font-size: 18px; font-weight: 800; margin-top: 0; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--gus-yellow);">
-                                基本情報
-                            </h2>
-                            
-                            <?php if ($formatted_amount): ?>
-                            <div class="gus-mobile-table-row">
-                                <div class="gus-mobile-table-label">補助金額（最大）</div>
-                                <div class="gus-mobile-table-value" style="font-size: 16px; font-weight: 700; color: #DC2626;">
-                                    <?php echo esc_html($formatted_amount); ?>
-                                </div>
-                            </div>
-                            <?php endif; ?>
 
-                            <?php if ($grant_data['organization']): ?>
-                            <div class="gus-mobile-table-row">
-                                <div class="gus-mobile-table-label">主催機関</div>
-                                <div class="gus-mobile-table-value"><?php echo esc_html($grant_data['organization']); ?></div>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($deadline_info): ?>
-                            <div class="gus-mobile-table-row">
-                                <div class="gus-mobile-table-label">申請締切</div>
-                                <div class="gus-mobile-table-value" style="<?php echo $deadline_class === 'urgent' ? 'color: #DC2626;' : ($deadline_class === 'warning' ? 'color: #F59E0B;' : ''); ?>">
-                                    <strong><?php echo esc_html($deadline_info); ?></strong>
-                                </div>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($grant_data['application_period']): ?>
-                            <div class="gus-mobile-table-row">
-                                <div class="gus-mobile-table-label">申請期間</div>
-                                <div class="gus-mobile-table-value"><?php echo esc_html($grant_data['application_period']); ?></div>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($grant_data['subsidy_rate']): ?>
-                            <div class="gus-mobile-table-row">
-                                <div class="gus-mobile-table-label">補助率</div>
-                                <div class="gus-mobile-table-value"><?php echo esc_html($grant_data['subsidy_rate']); ?></div>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <div class="gus-mobile-table-row">
-                                <div class="gus-mobile-table-label">難易度 / 採択率</div>
-                                <div class="gus-mobile-table-value">
-                                    <?php echo $difficulty_data['label']; ?> (<?php echo $difficulty_data['description']; ?>)
-                                    <?php if ($grant_data['adoption_rate'] > 0): ?>
-                                        <br>採択実績: <strong><?php echo number_format($grant_data['adoption_rate'], 1); ?>%</strong>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            
-                            <?php if ($prefecture_display): ?>
-                            <div class="gus-mobile-table-row">
-                                <div class="gus-mobile-table-label">対象地域</div>
-                                <div class="gus-mobile-table-value"><?php echo esc_html($prefecture_display); ?></div>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($municipality_display): ?>
-                            <div class="gus-mobile-table-row">
-                                <div class="gus-mobile-table-label">対象市町村</div>
-                                <div class="gus-mobile-table-value"><?php echo esc_html($municipality_display); ?></div>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($grant_data['area_notes']): ?>
-                            <div class="gus-mobile-table-row" style="padding-bottom: 0;">
-                                <div class="gus-mobile-table-label" style="font-weight: 500;">地域備考</div>
-                                <div class="gus-mobile-table-value" style="color: #B8860B; text-align: left; padding-left: 10px;"><?php echo esc_html($grant_data['area_notes']); ?></div>
-                            </div>
-                            <?php endif; ?>
+                    <dl class="gus-spec-list">
+                        <div class="gus-spec-row">
+                            <dt class="gus-spec-term">補助金額(最大)</dt>
+                            <dd class="gus-spec-desc price"><?php echo esc_html($formatted_amount); ?></dd>
                         </div>
                         
-                        <!-- 対象情報カード -->
-                        <?php if ($grant_data['grant_target'] || $expenses_content || $documents_content): ?>
-                        <div class="gus-mobile-table-card">
-                            <h3 style="font-size: 16px; font-weight: 800; margin-top: 0; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--gus-black);">
-                                対象情報
-                            </h3>
-                            <?php if ($grant_data['grant_target']): ?>
-                            <div class="gus-mobile-table-row" style="flex-direction: column; align-items: flex-start;">
-                                <div class="gus-mobile-table-label" style="margin-bottom: 4px; color: var(--gus-black);">対象者・対象事業</div>
-                                <div class="gus-mobile-table-value" style="text-align: left; width: 100%;"><?php echo wp_kses_post($grant_data['grant_target']); ?></div>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($expenses_content): ?>
-                            <div class="gus-mobile-table-row" style="flex-direction: column; align-items: flex-start;">
-                                <div class="gus-mobile-table-label" style="margin-bottom: 4px; color: var(--gus-black);">対象経費</div>
-                                <div class="gus-mobile-table-value" style="text-align: left; width: 100%;"><?php echo wp_kses_post($expenses_content); ?></div>
-                            </div>
-                            <?php endif; ?>
-
-                            <?php if ($documents_content): ?>
-                            <div class="gus-mobile-table-row" style="flex-direction: column; align-items: flex-start; border-bottom: none;">
-                                <div class="gus-mobile-table-label" style="margin-bottom: 4px; color: var(--gus-black);">必要書類</div>
-                                <div class="gus-mobile-table-value" style="text-align: left; width: 100%;"><?php echo wp_kses_post($documents_content); ?></div>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                        <?php endif; ?>              
-
- <!-- 申請方法カード -->
-                        <?php if ($grant_data['application_method']): ?>
-                        <div class="gus-mobile-table-card">
-                            <h3 style="font-size: 16px; font-weight: 800; margin-top: 0; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--gus-black);">
-                                申請方法
-                            </h3>
-                            <div class="gus-mobile-table-row" style="flex-direction: column; align-items: flex-start; border-bottom: none;">
-                                <div class="gus-mobile-table-value" style="text-align: left; width: 100%; font-weight: 500;"><?php echo nl2br(esc_html($grant_data['application_method'])); ?></div>
-                            </div>
+                        <?php if ($grant_data['subsidy_rate']): ?>
+                        <div class="gus-spec-row">
+                            <dt class="gus-spec-term">補助率</dt>
+                            <dd class="gus-spec-desc">
+                                <?php echo esc_html($grant_data['subsidy_rate']); ?>
+                                <?php if ($grant_data['subsidy_rate_detailed']): ?>
+                                    <div class="gus-spec-sub"><?php echo wp_kses_post($grant_data['subsidy_rate_detailed']); ?></div>
+                                <?php endif; ?>
+                            </dd>
                         </div>
                         <?php endif; ?>
-                        
-                        <!-- 関連キーワードカード -->
-                        <?php if ($taxonomies['categories'] || $taxonomies['tags']): ?>
-                        <div class="gus-mobile-table-card">
-                            <h3 class="gus-sidebar-title" style="margin-top: 0;">関連キーワード</h3>
-                            <div class="gus-table-tags-container" style="flex-direction: row; flex-wrap: wrap; gap: 8px;">
-                                <?php foreach ($taxonomies['categories'] as $cat): ?>
-                                    <a href="<?php echo get_term_link($cat); ?>" class="gus-table-tag" style="font-size: 10px; padding: 6px 10px; border-radius: 4px;">
-                                        <?php echo esc_html($cat->name); ?>
-                                    </a>
-                                <?php endforeach; ?>
-                                <?php foreach ($taxonomies['tags'] as $tag): ?>
-                                    <a href="<?php echo get_term_link($tag); ?>" class="gus-table-tag" style="font-size: 10px; padding: 6px 10px; border-radius: 4px;">
-                                        #<?php echo esc_html($tag->name); ?>
-                                    </a>
-                                <?php endforeach; ?>
-                            </div>
+
+                        <div class="gus-spec-row">
+                            <dt class="gus-spec-term">申請締切</dt>
+                            <dd class="gus-spec-desc">
+                                <span class="<?php echo $deadline_class; ?>"><?php echo esc_html($deadline_info); ?></span>
+                                <?php if ($grant_data['application_period']): ?>
+                                    <div class="gus-spec-sub">期間: <?php echo esc_html($grant_data['application_period']); ?></div>
+                                <?php endif; ?>
+                            </dd>
+                        </div>
+
+                        <?php if ($grant_data['grant_target']): ?>
+                        <div class="gus-spec-row">
+                            <dt class="gus-spec-term">対象者</dt>
+                            <dd class="gus-spec-desc"><?php echo wp_kses_post($grant_data['grant_target']); ?></dd>
                         </div>
                         <?php endif; ?>
-                    </div>
+
+                        <?php if ($expenses_content): ?>
+                        <div class="gus-spec-row">
+                            <dt class="gus-spec-term">対象経費</dt>
+                            <dd class="gus-spec-desc"><?php echo wp_kses_post($expenses_content); ?></dd>
+                        </div>
+                        <?php endif; ?>
+
+                        <div class="gus-spec-row">
+                            <dt class="gus-spec-term">対象地域</dt>
+                            <dd class="gus-spec-desc">
+                                <?php echo esc_html($prefecture_display); ?>
+                                <?php if ($grant_data['area_notes']): ?>
+                                    <div class="gus-spec-note">※<?php echo esc_html($grant_data['area_notes']); ?></div>
+                                <?php endif; ?>
+                            </dd>
+                        </div>
+                    </dl>
                 </div>
+
+                <style>
+                .gus-spec-table-wrapper {
+                    border: 1px solid #e5e5e5;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    margin-bottom: 30px;
+                    background: #fff;
+                }
+                .gus-spec-header {
+                    background: #333;
+                    color: #fff;
+                    padding: 15px 20px;
+                    border-bottom: 3px solid var(--gus-yellow);
+                }
+                .gus-spec-badge {
+                    display: inline-block;
+                    background: var(--gus-yellow);
+                    color: #000;
+                    font-size: 11px;
+                    font-weight: bold;
+                    padding: 2px 8px;
+                    border-radius: 2px;
+                    margin-bottom: 5px;
+                }
+                .gus-spec-title {
+                    margin: 0;
+                    font-size: 16px;
+                    font-weight: bold;
+                    line-height: 1.4;
+                    color: #fff;
+                }
+                .gus-spec-list {
+                    margin: 0;
+                    padding: 0;
+                }
+                .gus-spec-row {
+                    display: grid;
+                    grid-template-columns: 160px 1fr;
+                    border-bottom: 1px solid #f0f0f0;
+                }
+                .gus-spec-row:last-child { border-bottom: none; }
+                .gus-spec-term {
+                    background: #f9f9f9;
+                    padding: 15px;
+                    font-weight: bold;
+                    font-size: 14px;
+                    color: #333;
+                    display: flex;
+                    align-items: center;
+                }
+                .gus-spec-desc {
+                    margin: 0;
+                    padding: 15px;
+                    font-size: 14px;
+                    line-height: 1.6;
+                }
+                .gus-spec-desc.price {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #DC2626;
+                }
+                .gus-spec-sub { font-size: 12px; color: #666; margin-top: 4px; }
+                .gus-spec-note { font-size: 12px; color: #B8860B; margin-top: 4px; }
+                .gus-spec-desc .urgent { color: #DC2626; font-weight: bold; }
+                .gus-spec-desc .warning { color: #F59E0B; font-weight: bold; }
+
+                @media (max-width: 600px) {
+                    .gus-spec-row {
+                        grid-template-columns: 110px 1fr; 
+                    }
+                    .gus-spec-term {
+                        padding: 12px 10px;
+                        font-size: 12px;
+                        line-height: 1.3;
+                    }
+                    .gus-spec-desc {
+                        padding: 12px 10px;
+                    }
+                }
+                </style>
             </section>
 
             <!-- 詳細情報 -->
@@ -1294,41 +1118,209 @@ $modified_date = get_the_modified_date('c');
     </div>
 </main>
 
-<!-- モバイルフローティングAIボタン -->
-<button class="gus-mobile-ai-floating-btn" id="mobileAIFloatingBtn" type="button" aria-label="AIに質問">
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-    </svg>
-</button>
-
-<!-- モバイルパネル用オーバーレイ -->
-<div class="gus-mobile-panel-overlay" id="mobilePanelOverlay"></div>
-
-<!-- AIチャットパネル -->
-<div class="gus-mobile-panel" id="mobileAIPanel">
-    <div class="gus-mobile-panel-header">
-        <h2 class="gus-mobile-panel-title">
+<!-- AIチャット（改善版） -->
+<div id="ai-chat-wrapper">
+    <button id="ai-launcher" aria-label="AIに質問">
+        <div class="ai-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
-            AIに質問
-        </h2>
-        <button class="gus-mobile-panel-close" id="closeAIPanel" type="button" aria-label="閉じる">
-            ✕
-        </button>
-    </div>
-    <div class="gus-ai-panel">
-        <div class="gus-ai-chat-messages" id="mobileAiMessages">
-            <div class="gus-ai-message gus-ai-message--assistant">
-                <div class="gus-ai-message-avatar">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path d="M12 2v20M2 12h20"/>
-                    </svg>
-                </div>
-                <div class="gus-ai-message-content">
-                    こんにちは！この補助金について何でもお聞きください。申請条件、必要書類、対象経費など、詳しくお答えします。
+        </div>
+        <span class="ai-label">AI質問</span>
+    </button>
+
+    <div id="ai-window">
+        <div class="ai-header">
+            <div class="ai-header-title">
+                <span class="ai-avatar-icon">🤖</span> AIアシスタント
+            </div>
+            <button id="ai-close">×</button>
+        </div>
+        <div class="ai-body" id="ai-messages">
+            <div class="ai-msg bot">
+                <div class="ai-bubble">
+                    こんにちは!この補助金について何でも聞いてください。<br>
+                    「対象経費は?」「申請期限は?」などお答えします。
                 </div>
             </div>
+        </div>
+        <div class="ai-footer">
+            <div class="ai-suggestions">
+                <button onclick="sendAiQuery('申請条件は?')">申請条件</button>
+                <button onclick="sendAiQuery('必要書類は?')">必要書類</button>
+            </div>
+            <div class="ai-input-area">
+                <input type="text" id="ai-input" placeholder="質問を入力...">
+                <button id="ai-send">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* AIチャット用CSS */
+#ai-launcher {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    background: #111;
+    color: #FFD700;
+    border-radius: 50%;
+    border: 2px solid #FFD700;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+#ai-launcher:hover { transform: scale(1.05); }
+.ai-label { font-size: 9px; font-weight: bold; margin-top: -2px; }
+
+#ai-window {
+    display: none;
+    position: fixed;
+    bottom: 160px;
+    right: 20px;
+    width: 340px;
+    height: 450px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    z-index: 10000;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+@media (max-width: 480px) {
+    #ai-window {
+        width: 92%;
+        right: 4%;
+        bottom: 160px;
+        height: 50vh;
+    }
+}
+
+.ai-header {
+    background: #111;
+    color: #fff;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+.ai-body {
+    flex: 1;
+    background: #f5f5f5;
+    padding: 15px;
+    overflow-y: auto;
+}
+.ai-msg { margin-bottom: 10px; display: flex; }
+.ai-msg.bot { justify-content: flex-start; }
+.ai-msg.user { justify-content: flex-end; }
+.ai-bubble {
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 85%;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.ai-msg.bot .ai-bubble { background: #fff; border: 1px solid #ddd; border-top-left-radius: 2px; }
+.ai-msg.user .ai-bubble { background: #FFD700; color: #000; border-top-right-radius: 2px; }
+
+.ai-footer { padding: 10px; background: #fff; border-top: 1px solid #eee; }
+.ai-suggestions { display: flex; gap: 5px; margin-bottom: 8px; overflow-x: auto; }
+.ai-suggestions button {
+    white-space: nowrap;
+    background: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.ai-input-area { display: flex; gap: 8px; }
+#ai-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+}
+#ai-send {
+    background: #111;
+    color: #fff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+#ai-close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+}
+</style>
+
+<script>
+document.getElementById('ai-launcher').addEventListener('click', function() {
+    const win = document.getElementById('ai-window');
+    win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+});
+document.getElementById('ai-close').addEventListener('click', function() {
+    document.getElementById('ai-window').style.display = 'none';
+});
+
+function sendAiQuery(text) {
+    const msgs = document.getElementById('ai-messages');
+    
+    const userDiv = document.createElement('div');
+    userDiv.className = 'ai-msg user';
+    userDiv.innerHTML = `<div class="ai-bubble">${text}</div>`;
+    msgs.appendChild(userDiv);
+    msgs.scrollTop = msgs.scrollHeight;
+
+    setTimeout(() => {
+        const botDiv = document.createElement('div');
+        botDiv.className = 'ai-msg bot';
+        botDiv.innerHTML = `<div class="ai-bubble">「${text}」ですね。記事内を確認します...<br>(※実際の回答ロジックが入ります)</div>`;
+        msgs.appendChild(botDiv);
+        msgs.scrollTop = msgs.scrollHeight;
+    }, 800);
+}
+
+document.getElementById('ai-send').addEventListener('click', function() {
+    const input = document.getElementById('ai-input');
+    if(input.value.trim()) {
+        sendAiQuery(input.value);
+        input.value = '';
+    }
+});
+
+document.getElementById('ai-input').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {
+        document.getElementById('ai-send').click();
+    }
+});
+</script>
         </div>
         <div class="gus-ai-input-container">
             <div class="gus-ai-input-wrapper">
