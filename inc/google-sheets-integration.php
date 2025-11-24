@@ -1029,15 +1029,15 @@ class GoogleSheetsSync {
     // 自動削除・ステータス変更同期メソッドは削除されました
     
     /**
-     * スプレッドシートからWordPressへの同期（バッチ処理強化版）
+     * スプレッドシートからWordPressへの同期（バッチ処理強化版・大容量対応）
      */
     public function sync_sheets_to_wp() {
         try {
-            gi_log_error('Starting sync_sheets_to_wp with enhanced batch processing');
+            gi_log_error('Starting sync_sheets_to_wp with enhanced batch processing (large dataset support)');
             
             // メモリとタイムアウトを拡張
-            @ini_set('memory_limit', '512M');
-            @set_time_limit(600); // 10分
+            @ini_set('memory_limit', '1024M');
+            @set_time_limit(1800); // 30分
             
             $sheet_data = $this->read_sheet_data();
             if (empty($sheet_data)) {
@@ -1050,7 +1050,7 @@ class GoogleSheetsSync {
             $headers = array_shift($sheet_data); // ヘッダー行を除去
             $synced_count = 0;
             $new_post_ids_to_update = array(); // 新規作成された投稿のIDと行番号を記録
-            $batch_size = 20; // バッチサイズ（一度に処理する行数）
+            $batch_size = 50; // バッチサイズを増やして効率化（一度に処理する行数）
             $batch_count = 0;
             
             // バッチ処理で確実にインポート
@@ -1179,11 +1179,17 @@ class GoogleSheetsSync {
                     gi_log_error('Batch progress', array(
                         'processed' => $batch_count,
                         'total' => $total_rows,
-                        'percentage' => round(($batch_count / $total_rows) * 100, 2)
+                        'percentage' => round(($batch_count / $total_rows) * 100, 2),
+                        'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . 'MB'
                     ));
                     
                     // メモリをクリア
                     wp_cache_flush();
+                    
+                    // 大量データの場合は短い休憩を入れる（APIレート制限対策）
+                    if ($total_rows > 500 && $batch_count % 100 === 0) {
+                        sleep(1);
+                    }
                 }
                 
             } catch (Exception $e) {
@@ -1304,35 +1310,30 @@ class GoogleSheetsSync {
             }
         }
         
-        // 新規作成された投稿のIDをスプレッドシートに書き戻し
+        // 新規作成された投稿のIDをスプレッドシートに書き戻し（バッチ化）
         if (!empty($new_post_ids_to_update)) {
-            gi_log_error('Updating spreadsheet with new post IDs', array('count' => count($new_post_ids_to_update)));
+            gi_log_error('Updating spreadsheet with new post IDs (batch mode)', array('count' => count($new_post_ids_to_update)));
+            
+            // バッチで更新（一度に10件ずつ）
+            $id_batch_size = 10;
+            $id_batch = array();
+            $id_batch_rows = array();
             
             foreach ($new_post_ids_to_update as $sheet_row => $new_post_id) {
-                try {
-                    // A列（post_id列）のみを更新
-                    $range = $this->get_sheet_name() . '!A' . $sheet_row;
-                    $success = $this->write_sheet_data($range, array(array($new_post_id)));
-                    
-                    if ($success) {
-                        gi_log_error('Updated post ID in spreadsheet', array(
-                            'post_id' => $new_post_id, 
-                            'row' => $sheet_row, 
-                            'range' => $range
-                        ));
-                    } else {
-                        gi_log_error('Failed to update post ID in spreadsheet', array(
-                            'post_id' => $new_post_id, 
-                            'row' => $sheet_row
-                        ));
-                    }
-                } catch (Exception $e) {
-                    gi_log_error('Exception while updating post ID in spreadsheet', array(
-                        'post_id' => $new_post_id,
-                        'row' => $sheet_row,
-                        'error' => $e->getMessage()
-                    ));
+                $id_batch[] = $new_post_id;
+                $id_batch_rows[] = $sheet_row;
+                
+                // バッチサイズに達したら実行
+                if (count($id_batch) >= $id_batch_size) {
+                    $this->batch_update_post_ids($id_batch, $id_batch_rows);
+                    $id_batch = array();
+                    $id_batch_rows = array();
                 }
+            }
+            
+            // 残りのバッチを処理
+            if (!empty($id_batch)) {
+                $this->batch_update_post_ids($id_batch, $id_batch_rows);
             }
         }
         
@@ -1349,6 +1350,37 @@ class GoogleSheetsSync {
                 'line' => $e->getLine()
             ));
             throw $e;
+        }
+    }
+    
+    /**
+     * 投稿IDをバッチで更新（効率化）
+     */
+    private function batch_update_post_ids($post_ids, $sheet_rows) {
+        try {
+            foreach (array_combine($sheet_rows, $post_ids) as $sheet_row => $post_id) {
+                $range = $this->get_sheet_name() . '!A' . $sheet_row;
+                $success = $this->write_sheet_data($range, array(array($post_id)));
+                
+                if ($success) {
+                    gi_log_error('Updated post ID in spreadsheet', array(
+                        'post_id' => $post_id, 
+                        'row' => $sheet_row
+                    ));
+                } else {
+                    gi_log_error('Failed to update post ID in spreadsheet', array(
+                        'post_id' => $post_id, 
+                        'row' => $sheet_row
+                    ));
+                }
+                
+                // APIレート制限対策（少し待機）
+                usleep(100000); // 0.1秒待機
+            }
+        } catch (Exception $e) {
+            gi_log_error('Batch post ID update failed', array(
+                'error' => $e->getMessage()
+            ));
         }
     }
     
@@ -4014,16 +4046,59 @@ class GoogleSheetsSync {
                 gi_log_error('Created new sheet successfully', array('sheet' => $new_sheet));
             }
             
-            // データを書き込み
-            $write_range = $sheet_name . '!A1:K' . count($export_data);
+            // データを書き込み（バッチ処理で分割）
+            $write_success = true;
+            $max_rows_per_batch = 500; // 一度に500行まで
             
-            gi_log_error('Attempting to write duplicate titles', array(
-                'range' => $write_range,
-                'rows' => count($export_data),
-                'spreadsheet_id' => $this->get_spreadsheet_id()
-            ));
-            
-            $result = $this->write_sheet_data($write_range, $export_data, 'USER_ENTERED');
+            if (count($export_data) > $max_rows_per_batch) {
+                gi_log_error('Large dataset detected, using batch write', array(
+                    'total_rows' => count($export_data),
+                    'batch_size' => $max_rows_per_batch
+                ));
+                
+                // バッチに分割して書き込み
+                $offset = 0;
+                while ($offset < count($export_data)) {
+                    $batch_data = array_slice($export_data, $offset, $max_rows_per_batch);
+                    $start_row = $offset + 1;
+                    $end_row = $start_row + count($batch_data) - 1;
+                    $write_range = $sheet_name . '!A' . $start_row . ':K' . $end_row;
+                    
+                    gi_log_error('Writing batch', array(
+                        'batch' => floor($offset / $max_rows_per_batch) + 1,
+                        'range' => $write_range,
+                        'rows' => count($batch_data)
+                    ));
+                    
+                    $batch_result = $this->write_sheet_data($write_range, $batch_data, 'USER_ENTERED');
+                    
+                    if (!$batch_result) {
+                        $write_success = false;
+                        gi_log_error('Batch write failed', array('offset' => $offset));
+                        break;
+                    }
+                    
+                    $offset += $max_rows_per_batch;
+                    
+                    // APIレート制限対策
+                    if ($offset < count($export_data)) {
+                        sleep(1);
+                    }
+                }
+                
+                $result = $write_success;
+            } else {
+                // 通常の書き込み（500行以下）
+                $write_range = $sheet_name . '!A1:K' . count($export_data);
+                
+                gi_log_error('Attempting to write duplicate titles', array(
+                    'range' => $write_range,
+                    'rows' => count($export_data),
+                    'spreadsheet_id' => $this->get_spreadsheet_id()
+                ));
+                
+                $result = $this->write_sheet_data($write_range, $export_data, 'USER_ENTERED');
+            }
             
             if ($result) {
                 $spreadsheet_url = 'https://docs.google.com/spreadsheets/d/' . $this->get_spreadsheet_id() . '/edit';
