@@ -1998,7 +1998,44 @@ class GI_Smart_Query_Assistant {
             '研究開発' => ['R&D', '技術開発', 'イノベーション', '新技術']
         ];
         
-        return $alternatives;
+        // パターンマッチングで代替クエリ生成
+        foreach ($patterns as $keyword => $synonyms) {
+            if (mb_stripos($query, $keyword) !== false) {
+                foreach ($synonyms as $synonym) {
+                    $alternatives[] = str_ireplace($keyword, $synonym, $query);
+                }
+            }
+        }
+        
+        return array_unique($alternatives);
+    }
+    
+    /**
+     * Suggest related categories
+     */
+    private function suggest_related_categories($query) {
+        return [];
+    }
+    
+    /**
+     * Get search tips
+     */
+    private function get_search_tips($query) {
+        return [];
+    }
+    
+    /**
+     * Get popular grants
+     */
+    private function get_popular_grants() {
+        return [];
+    }
+    
+    /**
+     * Get example queries
+     */
+    private function get_example_queries($query) {
+        return [];
     }
 }
 
@@ -2185,375 +2222,6 @@ function gi_get_scored_related_grants($post_id, $taxonomies, $grant_data, $limit
     });
     
     return array_slice($scored_grants, 0, $limit);
-}
-        
-        foreach ($patterns as $keyword => $synonyms) {
-            if (mb_stripos($query, $keyword) !== false) {
-                foreach ($synonyms as $synonym) {
-                    $alt_query = str_replace($keyword, $synonym, $query);
-                    if ($alt_query !== $query) {
-                        $alternatives[] = [
-                            'query' => $alt_query,
-                            'reason' => "「{$keyword}」を「{$synonym}」に言い換えました"
-                        ];
-                    }
-                }
-            }
-        }
-        
-        // AI生成の提案（OpenAI利用可能時）
-        if ($this->openai->is_configured() && count($alternatives) < 3) {
-            $ai_suggestions = $this->generate_ai_alternative_queries($query);
-            $alternatives = array_merge($alternatives, $ai_suggestions);
-        }
-        
-        return array_slice($alternatives, 0, 5);
-    }
-    
-    /**
-     * AI-powered alternative query generation
-     */
-    private function generate_ai_alternative_queries($query) {
-        if (!$this->openai->is_configured()) {
-            return [];
-        }
-        
-        try {
-            $prompt = "以下の助成金検索クエリで結果が見つかりませんでした。より良い検索結果が得られる可能性のある、別の言い回しや関連キーワードを3つ提案してください。
-
-元のクエリ: {$query}
-
-各提案は以下の形式で:
-1. [代替クエリ]
-理由: [なぜこの提案が有効か]
-
-JSON形式で回答してください:
-{\"suggestions\": [{\"query\": \"...\", \"reason\": \"...\"}]}";
-
-            $response = $this->openai->generate_response($prompt, []);
-            
-            // JSONパース
-            if (preg_match('/\{.*\}/s', $response, $matches)) {
-                $data = json_decode($matches[0], true);
-                if (isset($data['suggestions']) && is_array($data['suggestions'])) {
-                    return $data['suggestions'];
-                }
-            }
-        } catch (Exception $e) {
-            error_log('AI alternative query generation failed: ' . $e->getMessage());
-        }
-        
-        return [];
-    }
-    
-    /**
-     * Suggest related categories
-     */
-    private function suggest_related_categories($query) {
-        $category_mapping = [
-            'IT' => ['grant_category' => ['IT関連', 'デジタル化', 'システム開発']],
-            'DX' => ['grant_category' => ['IT関連', 'デジタル化', 'イノベーション']],
-            '製造' => ['grant_category' => ['ものづくり', '製造業', '技術開発']],
-            'スタートアップ' => ['grant_category' => ['創業支援', 'ベンチャー', '起業']],
-            '環境' => ['grant_category' => ['環境・エネルギー', 'サステナビリティ', 'SDGs']],
-            '農業' => ['grant_category' => ['農林水産', '6次産業化']],
-            '観光' => ['grant_category' => ['観光', '地域活性化']],
-            '研究' => ['grant_category' => ['研究開発', 'R&D', 'イノベーション']]
-        ];
-        
-        $suggestions = [];
-        
-        foreach ($category_mapping as $keyword => $cats) {
-            if (mb_stripos($query, $keyword) !== false) {
-                foreach ($cats['grant_category'] as $cat) {
-                    $term = get_term_by('name', $cat, 'grant_category');
-                    if ($term) {
-                        $suggestions[] = [
-                            'category' => $cat,
-                            'term_id' => $term->term_id,
-                            'count' => $term->count,
-                            'link' => get_term_link($term)
-                        ];
-                    }
-                }
-            }
-        }
-        
-        // カテゴリが見つからない場合は人気カテゴリを提案
-        if (empty($suggestions)) {
-            $popular_cats = get_terms([
-                'taxonomy' => 'grant_category',
-                'orderby' => 'count',
-                'order' => 'DESC',
-                'number' => 5,
-                'hide_empty' => true
-            ]);
-            
-            foreach ($popular_cats as $term) {
-                $suggestions[] = [
-                    'category' => $term->name,
-                    'term_id' => $term->term_id,
-                    'count' => $term->count,
-                    'link' => get_term_link($term)
-                ];
-            }
-        }
-        
-        return $suggestions;
-    }
-    
-    /**
-     * Get search tips based on query
-     */
-    private function get_search_tips($query) {
-        $tips = [];
-        
-        // クエリ分析
-        $is_too_short = mb_strlen($query) < 3;
-        $is_too_long = mb_strlen($query) > 50;
-        $has_specific_location = preg_match('/(東京|大阪|愛知|福岡|北海道|神奈川|埼玉|千葉)/u', $query);
-        $has_industry = preg_match('/(製造|IT|農業|観光|飲食|建設|医療|介護)/u', $query);
-        $has_purpose = preg_match('/(創業|設備|開発|雇用|販路|輸出)/u', $query);
-        
-        if ($is_too_short) {
-            $tips[] = [
-                'type' => 'length',
-                'icon' => '',
-                'title' => 'より詳しいキーワードを追加してみましょう',
-                'description' => '「業種」「目的」「地域」を組み合わせると、より的確な結果が見つかります',
-                'example' => '例: 「IT 東京 スタートアップ」'
-            ];
-        }
-        
-        if (!$has_industry) {
-            $tips[] = [
-                'type' => 'industry',
-                'icon' => '🏭',
-                'title' => '業種を追加してみましょう',
-                'description' => '対象業種を指定すると、より適切な助成金が見つかります',
-                'example' => '例: 「製造業」「IT業」「飲食業」など'
-            ];
-        }
-        
-        if (!$has_specific_location) {
-            $tips[] = [
-                'type' => 'location',
-                'icon' => '📍',
-                'title' => '地域を指定してみましょう',
-                'description' => '都道府県や市区町村を指定すると、地域限定の助成金も見つかります',
-                'example' => '例: 「東京都」「大阪市」など'
-            ];
-        }
-        
-        if (!$has_purpose) {
-            $tips[] = [
-                'type' => 'purpose',
-                'icon' => '',
-                'title' => '目的を明確にしてみましょう',
-                'description' => '何に使いたいかを指定すると、マッチする助成金が見つかりやすくなります',
-                'example' => '例: 「設備投資」「人材採用」「販路拡大」など'
-            ];
-        }
-        
-        // 一般的なヒント
-        $tips[] = [
-            'type' => 'general',
-            'icon' => '',
-            'title' => 'カテゴリから探す',
-            'description' => 'カテゴリ一覧から興味のある分野を選んでみましょう',
-            'action' => 'show_categories'
-        ];
-        
-        return array_slice($tips, 0, 3);
-    }
-    
-    /**
-     * Get popular grants as fallback
-     */
-    private function get_popular_grants($limit = 5) {
-        // 閲覧数が多い助成金を取得
-        $args = [
-            'post_type' => 'grant',
-            'post_status' => 'publish',
-            'posts_per_page' => $limit,
-            'meta_key' => 'view_count',
-            'orderby' => 'meta_value_num',
-            'order' => 'DESC'
-        ];
-        
-        $query = new WP_Query($args);
-        $grants = [];
-        
-        if ($query->have_posts()) {
-            while ($query->have_posts()) {
-                $query->the_post();
-                $grants[] = [
-                    'id' => get_the_ID(),
-                    'title' => get_the_title(),
-                    'excerpt' => wp_trim_words(get_the_excerpt(), 30),
-                    'url' => get_permalink(),
-                    'view_count' => get_post_meta(get_the_ID(), 'view_count', true) ?: 0
-                ];
-            }
-            wp_reset_postdata();
-        }
-        
-        // 閲覧数がない場合は最新の助成金
-        if (empty($grants)) {
-            $args = [
-                'post_type' => 'grant',
-                'post_status' => 'publish',
-                'posts_per_page' => $limit,
-                'orderby' => 'date',
-                'order' => 'DESC'
-            ];
-            
-            $query = new WP_Query($args);
-            
-            if ($query->have_posts()) {
-                while ($query->have_posts()) {
-                    $query->the_post();
-                    $grants[] = [
-                        'id' => get_the_ID(),
-                        'title' => get_the_title(),
-                        'excerpt' => wp_trim_words(get_the_excerpt(), 30),
-                        'url' => get_permalink()
-                    ];
-                }
-                wp_reset_postdata();
-            }
-        }
-        
-        return $grants;
-    }
-    
-    /**
-     * Get example queries
-     */
-    private function get_example_queries($original_query) {
-        $examples = [
-            [
-                'query' => '東京都 IT スタートアップ 創業',
-                'description' => '地域・業種・目的を組み合わせた検索'
-            ],
-            [
-                'query' => '製造業 設備投資 補助金',
-                'description' => '業種と目的で絞り込んだ検索'
-            ],
-            [
-                'query' => '中小企業 DX デジタル化支援',
-                'description' => '対象者とキーワードを明確にした検索'
-            ],
-            [
-                'query' => '研究開発 R&D イノベーション',
-                'description' => '関連キーワードを複数使用した検索'
-            ],
-            [
-                'query' => '飲食業 販路拡大 コロナ対策',
-                'description' => '時事的なキーワードを含めた検索'
-            ]
-        ];
-        
-        // ランダムに3つ選択
-        shuffle($examples);
-        return array_slice($examples, 0, 3);
-    }
-    
-    /**
-     * Generate context-aware suggestions
-     */
-    public function generate_contextual_suggestions($user_id = null) {
-        $context_manager = GI_Context_Manager::getInstance();
-        $history = $context_manager->get_context_history(5);
-        
-        $suggestions = [];
-        
-        // 履歴に基づいた提案
-        if (!empty($history)) {
-            $recent_queries = array_map(function($item) {
-                return $item->query;
-            }, $history);
-            
-            $suggestions['based_on_history'] = [
-                'title' => '最近の検索に基づく提案',
-                'queries' => $this->generate_follow_up_queries($recent_queries)
-            ];
-        }
-        
-        // 時期に基づいた提案
-        $seasonal_suggestions = $this->get_seasonal_suggestions();
-        if (!empty($seasonal_suggestions)) {
-            $suggestions['seasonal'] = $seasonal_suggestions;
-        }
-        
-        return $suggestions;
-    }
-    
-    /**
-     * Generate follow-up queries
-     */
-    private function generate_follow_up_queries($recent_queries) {
-        $follow_ups = [];
-        
-        foreach ($recent_queries as $query) {
-            // より詳細な検索を提案
-            if (mb_strlen($query) < 20) {
-                $follow_ups[] = [
-                    'query' => $query . ' 詳細',
-                    'type' => 'detail',
-                    'label' => '詳しく検索'
-                ];
-                
-                $follow_ups[] = [
-                    'query' => $query . ' 申請方法',
-                    'type' => 'how_to',
-                    'label' => '申請方法を調べる'
-                ];
-            }
-            
-            // 類似検索を提案
-            $follow_ups[] = [
-                'query' => $query . ' 類似',
-                'type' => 'similar',
-                'label' => '類似の助成金を探す'
-            ];
-        }
-        
-        return array_slice($follow_ups, 0, 5);
-    }
-    
-    /**
-     * Get seasonal suggestions
-     */
-    private function get_seasonal_suggestions() {
-        $month = date('n');
-        $suggestions = [];
-        
-        $seasonal_keywords = [
-            1 => ['新年', '創業', '起業', '新規事業'],
-            2 => ['確定申告', '決算', '補助金申請'],
-            3 => ['新年度', '採用', '教育訓練'],
-            4 => ['新入社員', '人材育成', '研修'],
-            5 => ['中間決算', '設備投資'],
-            6 => ['省エネ', '環境対策', 'SDGs'],
-            7 => ['夏季休暇', 'インターン', '採用'],
-            8 => ['事業計画', '下半期', '戦略'],
-            9 => ['決算準備', '税制', '補助金'],
-            10 => ['年末調整', '資金調達'],
-            11 => ['年末決算', '来期計画'],
-            12 => ['年末商戦', '確定申告準備']
-        ];
-        
-        if (isset($seasonal_keywords[$month])) {
-            $suggestions = [
-                'title' => '今月のおすすめキーワード',
-                'keywords' => $seasonal_keywords[$month],
-                'month' => $month
-            ];
-        }
-        
-        return $suggestions;
-    }
 }
 
 /**
